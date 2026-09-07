@@ -27,15 +27,21 @@
 
 ### 자동 포트폴리오 비중은 이렇게 산출됩니다
 
-- **테마 = 거래소가 제공하는 업종(Sector) 분류**를 그대로 사용합니다. 사람이 종목-테마 매핑표를
-  만들 필요가 없습니다.
-- 업종별로 RS 상위 `TOP_N_PER_THEME`(기본 3)종목만 후보로 남기고, RS가 마이너스인 종목/업종은
-  자동으로 비중 0이 됩니다.
+- **테마 = 거래소가 제공하는 업종(Sector) 분류** 기반입니다. 미국은 S&P500의 GICS 업종을 그대로
+  쓰고, 한국은 KRX 세부 업종(반도체 제조업, 완제품 의약품 제조업 등 수백 개)을 AI 하드웨어·인프라/
+  바이오·제약/방산 같은 투자테마 느낌의 큰 카테고리로 묶는 번역 테이블(`KR_THEME_MAP`)을 거칩니다.
+  종목 하나하나가 아니라 업종 카테고리 단위로만 매핑해서 사람이 관리할 부담이 적습니다.
+- **테마가 강할수록 후보 종목이 더 많습니다.** 모든 테마를 무조건 같은 수로 뽑으면 RS가 유독
+  강하고 넓게 오르는 테마도 3종목으로 묶여서 "테마의 폭"이 안 드러나는 문제가 있었습니다. 그래서
+  테마를 RS 강도(그 테마 안에서 RS가 양수인 종목들의 합) 순으로 상/중/하위 1/3씩 나눠, 상위
+  테마는 `N_STRONG_THEME`(기본 6)개, 중위는 `N_MID_THEME`(기본 3)개, 하위는 `N_WEAK_THEME`
+  (기본 1)개까지 후보로 남깁니다. RS가 마이너스인 종목/업종은 자동으로 비중 0이 됩니다.
 - 업종 비중은 그 업종 후보 종목들의 RS 합에 비례, 업종 안에서는 개별 종목 RS 크기에 비례해서
   나눠 담습니다. → 시장 상황이 바뀌면(어떤 업종이 강해지거나 약해지면) 다음 실행 때 비중도
   자동으로 따라 바뀝니다.
-- 후보 종목 수(`TOP_N_PER_THEME`)는 `rs/compute_rs.py` 상단 상수 또는 워크플로 실행 시
-  `--top-n-theme` 인자로 조정할 수 있습니다.
+- 후보 종목 수(`N_STRONG_THEME`/`N_MID_THEME`/`N_WEAK_THEME`)는 `rs/compute_rs.py` 상단
+  상수, 환경변수, 또는 워크플로 실행 시 `--n-strong-theme`/`--n-mid-theme`/`--n-weak-theme`
+  인자로 조정할 수 있습니다.
 
 ### 수동 포트폴리오는 이렇게 입력합니다
 
@@ -104,8 +110,9 @@ General → Workflow permissions → Read and write permissions** 를 켭니다.
 - **유니버스 범위**: `rs/compute_rs.py` 의 `build_universe()` — 한국은 KOSPI200+KOSDAQ150
   (시가총액 상위), 미국은 S&P500으로 이미 제한되어 있습니다. `_kr_listing("KOSPI", top_n=200)` /
   `_kr_listing("KOSDAQ", top_n=150)` 의 숫자를 바꾸면 범위를 넓히거나 좁힐 수 있습니다.
-- **업종당 후보 종목 수**: `TOP_N_PER_THEME` (기본 3) — `rs/compute_rs.py` 상단 또는
-  워크플로에서 `--top-n-theme` 인자로.
+- **업종당 후보 종목 수(강도별)**: `N_STRONG_THEME`/`N_MID_THEME`/`N_WEAK_THEME` (기본 6/3/1)
+  — `rs/compute_rs.py` 상단 또는 워크플로에서 `--n-strong-theme`/`--n-mid-theme`/
+  `--n-weak-theme` 인자로.
 - **동시 실행 스레드 수**: `RS_MAX_WORKERS` 환경변수 (기본 16) — 너무 크면 시세 소스가 차단할 수 있음.
 - **대시보드 데이터 경로**: `index.html` 의 `CONFIG.PORTFOLIO_JSON_URL` / `CONFIG.UNIVERSE_JSON_URL`.
 
