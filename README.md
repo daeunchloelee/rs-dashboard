@@ -66,21 +66,23 @@ RS는 종가 기반 지표라 분/초 단위 실시간은 아니고, **장중 �
 이 README와 함께 받은 폴더 구조를 그대로 GitHub 저장소에 올리고, **Settings → Actions →
 General → Workflow permissions → Read and write permissions** 를 켭니다.
 
-### 4. (선택, 권장) 토스증권 Open API 연결
+### 4. 토스증권 Open API — 실사용 불가 판정 (사용 안 함)
 
-2026년 8월 전 고객 대상으로 열린 [토스증권 Open API](https://corp.tossinvest.com/ko/open-api)를
-연결하면 비공식 스크레이핑(FinanceDataReader) 대신 공식 API로 더 안정적으로 데이터를 받아옵니다.
+[토스증권 Open API](https://corp.tossinvest.com/ko/open-api) 연동을 시도했으나, 실제 공식
+문서(`openapi.tossinvest.com/openapi-docs`) 확인 결과 **GitHub Actions와는 구조적으로
+맞지 않아 사용하지 않기로 했습니다**. 이유:
 
-1. 토스증권 앱/웹에서 Open API 발급 절차를 밟아 `client_id`/`client_secret`을 받습니다
-   (본인 계좌 기반 개인 인증이라 이 단계는 대신 해드릴 수 없어요).
-2. GitHub 저장소 **Settings → Secrets and variables → Actions → New repository secret** 에서
-   `TOSS_CLIENT_ID`, `TOSS_CLIENT_SECRET` 두 개를 등록합니다.
-3. 아무것도 등록하지 않으면 자동으로 FinanceDataReader 방식으로 동작합니다 (설정 없이도 바로 사용 가능).
+- 토스 API는 **허용 IP 목록**에 등록된 IP에서만 호출을 허용하고, 나머지는 403으로 막습니다.
+  그런데 GitHub Actions 러너는 실행마다 IP가 바뀌는 공유 대역이라(GitHub 공식 문서도
+  "이 IP로 화이트리스트 걸지 말 것"을 권고함) 애초에 고정 등록이 불가능합니다.
+- 종목마스터 API에는 업종(Sector/GICS) 정보가 없어서, 있었어도 테마 분류에는 도움이
+  안 됐을 거예요.
 
-> ⚠️ `rs/toss_client.py`는 공개된 2차 자료를 근거로 작성됐고, 작성 환경 네트워크 정책상
-> 실제 호출을 검증하지 못했습니다. 토스 크리덴셜을 등록한 뒤 **반드시 Actions에서
-> workflow_dispatch로 한 번 직접 실행**해서 로그의 `[toss]` 경고가 없는지 확인하세요.
-> 필드명이 실제 API와 다르면 자동으로 FinanceDataReader로 폴백하니 대시보드 자체는 깨지지 않습니다.
+`rs/toss_client.py`는 코드로는 남겨뒀지만(나중에 고정 IP 서버를 경유하는 식으로 우회하고
+싶어질 경우를 위해), **`TOSS_CLIENT_ID`/`TOSS_CLIENT_SECRET` 시크릿을 등록하지 않으면
+자동으로 무시되고 FinanceDataReader만 사용**합니다. 이미 등록해두셨다면 GitHub 저장소
+**Settings → Secrets and variables → Actions** 에서 두 시크릿을 지워주세요(지우지 않아도
+동작에는 문제없지만, 매 실행마다 실패 로그가 한 번씩 더 찍힙니다).
 
 ### 5. 첫 실행 (전체 유니버스 데이터 생성)
 
