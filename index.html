@@ -296,9 +296,10 @@
       <span class="ctl-label">시장</span>
       <div class="seg" id="uniMktSeg" role="group" aria-label="시장 필터">
         <button data-umkt="all" aria-pressed="true">전체</button>
-        <button data-umkt="한국" aria-pressed="false">한국</button>
-        <button data-umkt="미국" aria-pressed="false">미국</button>
-        <button data-umkt="ETF" aria-pressed="false">ETF</button>
+        <button data-umkt="kr_stock" aria-pressed="false">한국 대형주</button>
+        <button data-umkt="kr_etf" aria-pressed="false">한국 ETF</button>
+        <button data-umkt="us_stock" aria-pressed="false">미국 대형주</button>
+        <button data-umkt="us_etf" aria-pressed="false">미국 ETF</button>
       </div>
       <span class="ctl-label" style="margin-left:8px">보기</span>
       <div class="seg" id="uniSortSeg" role="group" aria-label="정렬">
@@ -408,6 +409,19 @@ const CLS={
  bench:{ko:"벤치마크",c:"var(--bench)",hex:"#d2733a"},none:{ko:"중립",c:"var(--soft)",hex:"#aeb4c2"}
 };
 function classify(L,S){ if(L>=0&&S>=0)return"lead"; if(L<0&&S>=0)return"improv"; if(L>=0&&S<0)return"weak"; return"lag"; }
+/* 4분면(주도/개선/약화/소외)별로 상위 n개씩 뽑아 라벨을 붙인다 — 전체에서 top-N만 뽑으면
+   한쪽 분면에 라벨이 몰리고 다른 분면은 텅 비어보이는 문제를 막는다. */
+function topByQuadrant(items,getL,getS,getClass,n=10){
+ const buckets={lead:[],improv:[],weak:[],lag:[]};
+ items.forEach(it=>{const k=getClass(it);(buckets[k]||buckets.lag).push(it);});
+ let out=[];
+ Object.keys(buckets).forEach(k=>{
+  buckets[k].sort((a,b)=>(Math.abs(getL(b))+Math.abs(getS(b)))-(Math.abs(getL(a))+Math.abs(getS(a))));
+  out=out.concat(buckets[k].slice(0,n));
+ });
+ return out;
+}
+const UMKT_LABEL={all:"전체",kr_stock:"한국 대형주",kr_etf:"한국 ETF",us_stock:"미국 대형주",us_etf:"미국 ETF"};
 function normCdf(z){const t=1/(1+0.2316419*Math.abs(z));const d=0.3989423*Math.exp(-z*z/2);
   let p=d*t*(0.3193815+t*(-0.3565638+t*(1.781478+t*(-1.821256+t*1.330274))));return z>0?1-p:p;}
 function rsScore(L,S){return Math.max(1,Math.min(99,Math.round(normCdf((0.55*L+0.45*S)/15)*98)+1));}
@@ -473,9 +487,9 @@ function renderComet(){
  let dots="";
  HOLD.forEach(h=>{const L=h[4],S=h[5];const cls=h[10]||(isBench(h)?"bench":classify(L,S));const c=CLS[cls].hex;
    dots+=`<circle cx="${sx(L).toFixed(1)}" cy="${sy(S).toFixed(1)}" r="4.5" fill="${c}" fill-opacity="0.9" stroke="#fff" stroke-width="1"/>`;});
- // 라벨은 너무 많으면 겹치므로 |L|+|S| 상위 10개만
- const top=[...HOLD].map(h=>({h,m:Math.abs(h[4])+Math.abs(h[5])})).sort((a,b)=>b.m-a.m).slice(0,10);
- let labels="";top.forEach(({h})=>{const L=h[4],S=h[5];const lx=sx(L),ly=sy(S);
+ // 라벨: 4분면(주도/개선/약화/소외)별로 |L|+|S| 상위 10개씩 — 한쪽 분면에만 라벨이 몰리지 않게
+ const top=topByQuadrant(HOLD,h=>h[4],h=>h[5],h=>classify(h[4],h[5]),10);
+ let labels="";top.forEach(h=>{const L=h[4],S=h[5];const lx=sx(L),ly=sy(S);
    labels+=`<text x="${(lx+7).toFixed(1)}" y="${(ly+3).toFixed(1)}" font-size="10" font-weight="700" fill="#2a3354">${h[3]}</text>`;});
  const quad=(x,y,t,col)=>`<text x="${x}" y="${y}" font-size="12" font-weight="800" fill="${col}" opacity="0.5">${t}</text>`;
  const svg=`<svg width="100%" viewBox="0 0 ${W} ${H}" style="min-width:560px" role="img" aria-label="RS 코멧 차트">
@@ -538,7 +552,7 @@ const UNI_SAMPLE=[
  {code:"DELL",name:"델",market:"미국",longZ:21,shortZ:18,longRS:94,shortRS:94,class:"lead"},
  {code:"ARM",name:"ARM",market:"미국",longZ:20,shortZ:22,longRS:92,shortRS:97,class:"lead"},
  {code:"MRNA",name:"모더나",market:"미국",longZ:16,shortZ:28,longRS:85,shortRS:99,class:"lead"},
- {code:"SOXX",name:"반도체 ETF",market:"ETF",longZ:14,shortZ:8,longRS:82,shortRS:74,class:"lead"},
+ {code:"SOXX",name:"반도체 ETF",market:"미국",sector:"ETF",longZ:14,shortZ:8,longRS:82,shortRS:74,class:"lead"},
  {code:"352820",name:"하이브",market:"한국",longZ:-8,shortZ:13,longRS:38,shortRS:88,class:"improv"},
  {code:"471140",name:"알지노믹스",market:"한국",longZ:-16,shortZ:4,longRS:22,shortRS:60,class:"improv"},
  {code:"CEG",name:"컨스텔레이션에너지",market:"미국",longZ:-8,shortZ:6,longRS:40,shortRS:66,class:"improv"},
@@ -573,7 +587,16 @@ async function loadUniverse(){
   if(mLag&&j.lag)mLag.textContent=j.lag;
  }catch(e){ UNI=UNI_SAMPLE.slice(); uniLoaded=false; meta.textContent="샘플 (Actions 실행 전)"; if(mMeta)mMeta.textContent="샘플"; }
 }
-function uniFiltered(){return state.umkt==="all"?UNI:UNI.filter(u=>u.market===state.umkt);}
+function uniFiltered(){
+ const isEtf=u=>u.sector==="ETF";
+ switch(state.umkt){
+  case "kr_stock": return UNI.filter(u=>u.market==="한국"&&!isEtf(u));
+  case "kr_etf":   return UNI.filter(u=>u.market==="한국"&&isEtf(u));
+  case "us_stock": return UNI.filter(u=>u.market==="미국"&&!isEtf(u));
+  case "us_etf":   return UNI.filter(u=>u.market==="미국"&&isEtf(u));
+  default: return UNI;
+ }
+}
 function renderUniComet(){
  const items=uniFiltered();
  const W=700,H=400,pad=42,xmin=-40,xmax=40,ymin=-40,ymax=40;
@@ -581,8 +604,9 @@ function renderUniComet(){
  const x0=sx(0),y0=sy(0);
  const small=items.length>120;
  let dots=items.map(u=>`<circle cx="${sx(u.longZ).toFixed(1)}" cy="${sy(u.shortZ).toFixed(1)}" r="${small?2.3:4}" fill="${CLS[u.class]?CLS[u.class].hex:'#999'}" fill-opacity="${small?0.6:0.85}"/>`).join("");
- const top=[...items].map(u=>({u,m:Math.abs(u.longZ)+Math.abs(u.shortZ)})).sort((a,b)=>b.m-a.m).slice(0,small?18:24);
- let labels=top.map(({u})=>`<text x="${(sx(u.longZ)+6).toFixed(1)}" y="${(sy(u.shortZ)+3).toFixed(1)}" font-size="9.5" font-weight="700" fill="#2a3354">${u.name}</text>`).join("");
+ // 라벨: 4분면별로 |longZ|+|shortZ| 상위 10개씩(최대 40개) — 필터로 좁혀도 각 분면이 골고루 보이게
+ const top=topByQuadrant(items,u=>u.longZ,u=>u.shortZ,u=>u.class,10);
+ let labels=top.map(u=>`<text x="${(sx(u.longZ)+6).toFixed(1)}" y="${(sy(u.shortZ)+3).toFixed(1)}" font-size="9.5" font-weight="700" fill="#2a3354">${u.name}</text>`).join("");
  const q=(x,y,t,c)=>`<text x="${x}" y="${y}" font-size="12" font-weight="800" fill="${c}" opacity="0.5">${t}</text>`;
  document.getElementById("uniComet").innerHTML=`<svg width="100%" viewBox="0 0 ${W} ${H}" style="min-width:560px" role="img" aria-label="유니버스 RS 코멧">
    <rect x="${pad}" y="${pad}" width="${W-2*pad}" height="${H-2*pad}" fill="#fcfdff" stroke="#eef1f7"/>
@@ -613,7 +637,7 @@ function renderUniTable(){
    <td><span class="rs-pill" style="background:${C.hex}">${C.ko}</span></td>
    <td class="metric"><b>${u.longRS}</b></td><td class="metric">${u.shortRS}</td>
    <td class="metric" style="color:${delta(u)>=0?'#1f8a5b':'#c0394f'}">${delta(u)>=0?'+':''}${delta(u)}</td></tr>`;}).join("");
- document.getElementById("universe").innerHTML=`<div class="htbl"><div class="rhead"><span class="name">${title}</span><span class="cnt">상위 ${items.length} · ${state.umkt==="all"?"전체":state.umkt}</span></div>
+ document.getElementById("universe").innerHTML=`<div class="htbl"><div class="rhead"><span class="name">${title}</span><span class="cnt">상위 ${items.length} · ${UMKT_LABEL[state.umkt]||"전체"}</span></div>
   <div class="scroller"><table style="min-width:560px"><thead><tr><th>#</th><th>종목</th><th>시장</th><th>등급</th><th>장기RS</th><th>단기RS</th><th>모멘텀Δ</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;
 }
 async function renderUniverse(){ if(!UNI.length) await loadUniverse(); renderUniComet(); renderUniTable(); }
