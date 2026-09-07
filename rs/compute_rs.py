@@ -46,7 +46,9 @@ TOP_N_PER_THEME = int(os.environ.get("TOP_N_PER_THEME", 3))  # 업종별 후보 
 MAX_WORKERS = int(os.environ.get("RS_MAX_WORKERS", 16))       # 동시 가격조회 스레드 수
 
 
-def _kr_listing(market):
+def _kr_listing(market, top_n=None):
+    """market: 'KOSPI' 또는 'KOSDAQ'. top_n을 주면 시가총액 상위 top_n개로만 자른다
+    (예: KOSPI200 = _kr_listing('KOSPI', 200), KOSDAQ150 = _kr_listing('KOSDAQ', 150))."""
     try:
         k = fdr.StockListing(market)
     except Exception as e:
@@ -56,17 +58,25 @@ def _kr_listing(market):
     name_col = "Name" if "Name" in k.columns else k.columns[1]
     sec_col = next((c for c in ["Sector", "Industry"] if c in k.columns), None)
     mc_col = next((c for c in ["Marcap", "MarketCap", "Amount"] if c in k.columns), None)
+    if top_n and mc_col:
+        k = k.sort_values(mc_col, ascending=False).head(top_n)
+    elif top_n:
+        k = k.head(top_n)  # 시총 컬럼이 없으면 순서 그대로 상위 top_n개
     out = []
     for _, r in k.iterrows():
         code = str(r[code_col]).zfill(6)
         sector = str(r[sec_col]).strip() if sec_col and pd.notna(r.get(sec_col)) else "기타"
         marcap = r[mc_col] if mc_col and pd.notna(r.get(mc_col)) else None
         out.append((code, str(r[name_col]), "한국", sector or "기타", marcap))
-    print(f"[universe] {market}: {len(out)}")
+    label = f"{market}{top_n}" if top_n else market
+    print(f"[universe] {label}: {len(out)}")
     return out
 
 
 def _us_listing(market):
+    """전체 거래소 상장사 스캔용 (기본 build_universe()는 안 씀 — 종목 수가 너무 많아서
+    미국은 S&P500만 쓰기로 함). 나중에 다시 넓히고 싶으면 build_universe()에서 이 함수를
+    NASDAQ/NYSE/AMEX 각각에 대해 호출해서 uni에 더하면 된다."""
     try:
         s = fdr.StockListing(market)
     except Exception as e:
@@ -85,29 +95,72 @@ def _us_listing(market):
     return out
 
 
+def _sp500_constituents():
+    """미국 쪽 유니버스 = S&P500만 (전체 상장사 대신). [(symbol, name, sector), ...] 반환.
+    안정적인 GitHub CSV(GICS 업종 포함) 우선, 실패 시 FDR로 폴백."""
+    try:
+        import requests, io
+        url = "https://raw.githubusercontent.com/datasets/s-and-p-500-companies/main/data/constituents.csv"
+        txt = requests.get(url, timeout=20).text
+        sp = pd.read_csv(io.StringIO(txt))
+        sec_col = next((c for c in ["GICS Sector", "Sector"] if c in sp.columns), None)
+        out = []
+        for _, r in sp.iterrows():
+            sector = str(r[sec_col]).strip() if sec_col and pd.notna(r.get(sec_col)) else "Other"
+            out.append((str(r["Symbol"]).strip(), str(r.get("Security", r["Symbol"])), sector or "Other"))
+        print(f"[universe] S&P500(CSV): {len(out)}")
+        return out
+    except Exception as e1:
+        print("[universe] S&P500 CSV 실패, FDR 시도:", e1)
+        try:
+            s = fdr.StockListing("S&P500")
+            sym_col = next((c for c in ["Symbol", "Code"] if c in s.columns), s.columns[0])
+            nm_col = next((c for c in ["Name"] if c in s.columns), s.columns[1])
+            sec_col = next((c for c in ["Sector", "Industry"] if c in s.columns), None)
+            out = []
+            for _, r in s.iterrows():
+                sector = str(r[sec_col]).strip() if sec_col and pd.notna(r.get(sec_col)) else "Other"
+                out.append((str(r[sym_col]).strip(), str(r[nm_col]), sector or "Other"))
+            print(f"[universe] S&P500(FDR): {len(out)}")
+            return out
+        except Exception as e2:
+            print("[universe] S&P500 실패:", e2)
+            return []
+
+
 def build_universe(limit=None):
     """[(code, name, region, sector, marcap_or_None), ...] 리스트를 반환.
-    토스 크리덴셜이 있으면 토스 종목마스터를 우선 사용, 실패/미설정 시 FDR로 폴백."""
+    토스 크리덴셜이 있으면 토스 종목마스터를 우선 사용, 실패/미설정 시 FDR로 폴백.
+    종목 수가 너무 많으면 실행 시간이 부담되니 (백엔드에 상관없이) 한국은
+    KOSPI200+KOSDAQ150(시가총액 상위), 미국은 S&P500 500개로만 제한한다 — 필요하면
+    아래 kr_top_codes/sp500_syms 필터를 지우면 다시 전체로 넓어진다."""
     uni = []
     used_toss = False
+    sp500 = _sp500_constituents()
+    sp500_syms = {sym for sym, _, _ in sp500}
+    kr_top = _kr_listing("KOSPI", top_n=200) + _kr_listing("KOSDAQ", top_n=150)
+    kr_top_codes = {code for code, *_ in kr_top}
+
     if toss_client.enabled():
         try:
             master = toss_client.fetch_stock_master()
             if master:
                 for it in master:
                     region = "한국" if any(k in it["market"] for k in ["KOSPI", "KOSDAQ", "KRX", "KR"]) else "미국"
+                    if region == "미국" and it["code"] not in sp500_syms:
+                        continue  # 미국은 S&P500만
+                    if region == "한국" and it["code"] not in kr_top_codes:
+                        continue  # 한국은 KOSPI200+KOSDAQ150만
                     uni.append((it["code"], it["name"], region, it["sector"] or "기타", None))
                 used_toss = True
-                print(f"[universe] 토스 종목마스터: {len(uni)}")
+                print(f"[universe] 토스 종목마스터: {len(uni)} (미국 S&P500 / 한국 KOSPI200+KOSDAQ150로 제한)")
         except Exception as e:
             print("[universe] 토스 종목마스터 실패, FDR로 폴백:", e)
 
     if not used_toss:
-        uni += _kr_listing("KOSPI")
-        uni += _kr_listing("KOSDAQ")
-        uni += _us_listing("NASDAQ")
-        uni += _us_listing("NYSE")
-        uni += _us_listing("AMEX")
+        uni += kr_top
+        for sym, name, sector in sp500:
+            uni.append((sym, name, "미국", sector, None))
 
     for t in ETF_US: uni.append((t, t, "미국", "ETF", None))
     for t in ETF_KR: uni.append((t, t, "한국", "ETF", None))
