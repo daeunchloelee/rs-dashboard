@@ -1,0 +1,57 @@
+yaml
+name: RS 자동 갱신
+
+on:
+  schedule:
+    # 한국장(00:00~06:30 UTC = 09:00~15:30 KST) + 미국장(13:00~21:00 UTC, 서머타임 기준 근사)
+    # 매 정시(1시간 간격), 평일만
+    - cron: "0 0-6,13-21 * * 1-5"
+  workflow_dispatch: {}
+
+concurrency:
+  group: rs-update
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 파이썬 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: RS 계산 (유니버스 + 자동/수동 포트폴리오)
+        working-directory: rs
+        env:
+          TOSS_CLIENT_ID: ${{ secrets.TOSS_CLIENT_ID }}
+          TOSS_CLIENT_SECRET: ${{ secrets.TOSS_CLIENT_SECRET }}
+        run: |
+          python compute_rs.py \
+            --out ../data/rs.json \
+            --portfolio-out ../data/portfolio.json \
+            --manual-in ../data/manual.json \
+            --manual-out ../data/manual_portfolio.json
+
+      - name: 결과 커밋
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          # data/manual.json은 사용자가 직접 입력하는 파일이라 여기서는 절대 덮어쓰지 않음
+          git add data/rs.json data/portfolio.json data/manual_portfolio.json
+          if git diff --staged --quiet; then
+            echo "변경 없음"
+          else
+            git commit -m "RS 자동 갱신: $(date -u +%Y-%m-%dT%H:%M)"
+            git push
+          fi
