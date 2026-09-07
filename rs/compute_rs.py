@@ -82,9 +82,35 @@ ETF_US = ["SPY","QQQ","DIA","IWM","VTI","VOO","SOXX","SMH","XLK","VGT","XLF","XL
           "GLD","SLV","USO","TLT","HYG","EEM","EFA","FXI","EWY","EWJ","VNQ","SCHD","JEPI"]
 ETF_KR = ["069500","229200","305540","091160","091170","305720","364980","371460","148020",
           "117460","139260","102110","233740","251340","294400","357870","456600","473460"]
+# 미국 ETF 정식명 — 이 18개(코스피/코스닥과 달리)는 티커가 안 바뀌는 초대형 고정 상품이라
+# 정적으로 적어둔다(한국 ETF는 신규 상장이 잦아서 대신 실시간 조회로 처리함, _kr_etf_names 참고).
+ETF_US_NAMES = {
+    "SPY":"SPDR S&P 500 ETF Trust", "QQQ":"Invesco QQQ Trust", "DIA":"SPDR Dow Jones Industrial Average ETF Trust",
+    "IWM":"iShares Russell 2000 ETF", "VTI":"Vanguard Total Stock Market ETF", "VOO":"Vanguard S&P 500 ETF",
+    "SOXX":"iShares Semiconductor ETF", "SMH":"VanEck Semiconductor ETF", "XLK":"Technology Select Sector SPDR Fund",
+    "VGT":"Vanguard Information Technology ETF", "XLF":"Financial Select Sector SPDR Fund",
+    "XLE":"Energy Select Sector SPDR Fund", "XLV":"Health Care Select Sector SPDR Fund",
+    "XLI":"Industrial Select Sector SPDR Fund", "XLY":"Consumer Discretionary Select Sector SPDR Fund",
+    "XLP":"Consumer Staples Select Sector SPDR Fund", "XLU":"Utilities Select Sector SPDR Fund",
+    "XLB":"Materials Select Sector SPDR Fund", "XLRE":"Real Estate Select Sector SPDR Fund",
+    "XLC":"Communication Services Select Sector SPDR Fund", "ARKK":"ARK Innovation ETF",
+    "TAN":"Invesco Solar ETF", "ICLN":"iShares Global Clean Energy ETF", "LIT":"Global X Lithium & Battery Tech ETF",
+    "IBB":"iShares Biotechnology ETF", "XBI":"SPDR S&P Biotech ETF", "GLD":"SPDR Gold Shares",
+    "SLV":"iShares Silver Trust", "USO":"United States Oil Fund LP", "TLT":"iShares 20+ Year Treasury Bond ETF",
+    "HYG":"iShares iBoxx $ High Yield Corporate Bond ETF", "EEM":"iShares MSCI Emerging Markets ETF",
+    "EFA":"iShares MSCI EAFE ETF", "FXI":"iShares China Large-Cap ETF", "EWY":"iShares MSCI South Korea ETF",
+    "EWJ":"iShares MSCI Japan ETF", "VNQ":"Vanguard Real Estate ETF", "SCHD":"Schwab US Dividend Equity ETF",
+    "JEPI":"JPMorgan Equity Premium Income ETF",
+}
 
 # ---- 포트폴리오 자동 구성 파라미터 ----
-TOP_N_PER_THEME = int(os.environ.get("TOP_N_PER_THEME", 3))  # 업종별 후보 종목 수
+# 예전엔 모든 업종(테마)이 무조건 top_n(3)개 후보로 똑같았다 — 그러면 RS가 유독 강하고
+# 넓게 오르는 테마도 3종목으로 묶여서 "테마의 폭"이 드러나지 않는 문제가 있었다.
+# 그래서 테마를 RS 강도(그 테마 안에서 RS가 양수인 종목들의 합) 순으로 3등분(상/중/하위)해서
+# 강한 테마일수록 후보 종목을 더 많이 남기도록 바꿨다.
+N_STRONG_THEME = int(os.environ.get("N_STRONG_THEME", 6))  # 상위 1/3 테마: 후보 종목 수
+N_MID_THEME    = int(os.environ.get("N_MID_THEME", 3))     # 중위 1/3 테마: 후보 종목 수
+N_WEAK_THEME   = int(os.environ.get("N_WEAK_THEME", 1))    # 하위 1/3 테마: 후보 종목 수
 MAX_WORKERS = int(os.environ.get("RS_MAX_WORKERS", 16))       # 동시 가격조회 스레드 수
 
 
@@ -105,6 +131,40 @@ def _kr_etf_names():
             else:
                 print("[universe] ETF/KR 이름 조회 실패, 종목코드를 이름으로 사용:", e)
     return {}
+
+
+# ---- 한국 종목 테마 분류: KRX 세부 업종(수백 개, 예: '반도체 제조업', '완제품 의약품 제조업')을
+# 투자테마 느낌의 큰 카테고리로 묶는 번역 테이블. 종목 하나하나를 매핑하는 게 아니라
+# "업종 카테고리" 단위로만 매핑하기 때문에(개수가 훨씬 적고 잘 안 바뀜) 유지보수가 쉽다.
+# 순서가 중요: 위에서부터 먼저 매칭되는 테마로 확정된다(좁은 카테고리를 위쪽에 둠).
+# 여기 키워드에 안 걸리는 업종은 '기타'로 남는다 — 실행 로그에 '기타'로 빠진 원본 업종명이
+# 찍히니, 필요하면 그 목록을 보고 키워드를 추가하면 된다.
+KR_THEME_MAP = [
+    ("2차전지·배터리",      ["2차전지", "축전지", "배터리"]),
+    ("로봇·우주항공",       ["로봇", "우주", "항공기", "드론"]),
+    ("방산",               ["무기", "총포", "방위산업", "군수"]),
+    ("AI 하드웨어·인프라",   ["반도체", "전자부품", "디스플레이", "전자집적회로", "컴퓨터", "통신 및 방송 장비",
+                             "영상 및 음향기기", "전자관"]),
+    ("AI 소프트웨어·플랫폼", ["소프트웨어", "인터넷", "포털", "정보서비스", "시스템 통합", "데이터"]),
+    ("전력 인프라",         ["발전기", "변전", "배전", "전기 변환", "원자력", "전선", "케이블"]),
+    ("에너지 인프라·조선·건설", ["선박", "보트 건조", "조선", "건설업", "신재생", "태양광", "태양력", "풍력", "플랜트"]),
+    ("바이오·제약",         ["의약", "제약", "바이오", "의료기기", "생물학적 제제", "진단"]),
+    ("자동차·모빌리티",     ["자동차", "타이어"]),
+    ("K-컬쳐·미디어",       ["방송", "영화", "음반", "엔터테인먼트", "화장품", "출판", "오락"]),
+    ("금융",               ["은행", "증권", "보험", "카드", "금융업", "캐피탈"]),
+    ("화학·소재",           ["화학물질", "석유화학", "합성고무", "플라스틱", "고무"]),
+    ("철강·금속",           ["제철", "제강", "철강", "비철금속", "금속 가공"]),
+    ("통신",               ["전기통신", "통신업"]),
+    ("유통·소비재",         ["도매", "소매", "식품", "음료", "슈퍼마켓", "편의점"]),
+]
+
+
+def _map_kr_theme(raw_sector, raw_industry=""):
+    text = f"{raw_sector or ''} {raw_industry or ''}"
+    for theme, keywords in KR_THEME_MAP:
+        if any(kw in text for kw in keywords):
+            return theme
+    return None  # 매칭 실패 — 호출부에서 '기타' 처리 + 원본 업종명 로깅
 
 
 def _kr_listing(market, top_n=None):
@@ -128,23 +188,32 @@ def _kr_listing(market, top_n=None):
     # 업종(Sector) 컬럼이 원래 없다 — 그래서 이전 버전은 한국 종목이 전부 "기타"로 떴다.
     # 업종은 반드시 별도의 '...-DESC' 변형(KRX 상장회사 상세정보)에서 Code 기준으로 가져와야 한다.
     sector_map = {}
+    unmapped_raw = {}  # 테마 매핑에 안 걸린 원본 KRX 업종명 → 등장 횟수 (로그 확인용)
     for attempt in range(2):
         try:
             desc = fdr.StockListing(f"{market}-DESC")
             code_col_d = "Code" if "Code" in desc.columns else desc.columns[0]
-            sec_col_d = next((c for c in ["Sector", "Industry"] if c in desc.columns), None)
-            if sec_col_d:
+            has_sec = "Sector" in desc.columns
+            has_ind = "Industry" in desc.columns
+            if has_sec or has_ind:
                 for _, r in desc.iterrows():
                     c = str(r[code_col_d]).zfill(6)
-                    s = r.get(sec_col_d)
-                    if pd.notna(s) and str(s).strip():
-                        sector_map[c] = str(s).strip()
+                    raw_sec = str(r.get("Sector")).strip() if has_sec and pd.notna(r.get("Sector")) else ""
+                    raw_ind = str(r.get("Industry")).strip() if has_ind and pd.notna(r.get("Industry")) else ""
+                    theme = _map_kr_theme(raw_sec, raw_ind)
+                    if theme:
+                        sector_map[c] = theme
+                    elif raw_sec:
+                        unmapped_raw[raw_sec] = unmapped_raw.get(raw_sec, 0) + 1
             break
         except Exception as e:
             if attempt == 0:
                 time.sleep(2)
             else:
                 print(f"[universe] {market}-DESC(업종) 조회 실패, 업종은 '기타'로 처리:", e)
+    if unmapped_raw:
+        top_unmapped = sorted(unmapped_raw.items(), key=lambda x: -x[1])[:8]
+        print(f"[universe] {market} 테마 미매칭(→'기타') 상위 업종명: {top_unmapped}")
 
     code_col = "Code" if "Code" in k.columns else k.columns[0]
     name_col = "Name" if "Name" in k.columns else k.columns[1]
@@ -264,7 +333,7 @@ def build_universe(limit=None):
             uni.append((sym, name, "미국", sector, None))
 
     kr_etf_names = _kr_etf_names()
-    for t in ETF_US: uni.append((t, t, "미국", "ETF", None))
+    for t in ETF_US: uni.append((t, ETF_US_NAMES.get(t, t), "미국", "ETF", None))
     for t in ETF_KR: uni.append((t, kr_etf_names.get(t, t), "한국", "ETF", None))
 
     # dedup (코드 기준, 먼저 나온 항목 유지)
@@ -412,20 +481,37 @@ def build_manual(df, manual_in):
     return theme_out, hold_out, len(missing)
 
 
-def build_portfolio(df, top_n):
-    """업종(sector)별 RS 상위 top_n 종목만 후보로 남기고, RS 크기 비례로 비중을 배분한다."""
+def build_portfolio(df, n_strong=N_STRONG_THEME, n_mid=N_MID_THEME, n_weak=N_WEAK_THEME):
+    """업종(sector)별로 RS가 강한 테마일수록 후보 종목을 더 많이 남기고, RS 크기 비례로
+    비중을 배분한다. 테마를 'RS가 양수인 종목들의 Z합'(raw_strength, 후보 수 제한 없이
+    전체 기준) 순으로 줄 세워 상위 1/3은 n_strong개, 중위 1/3은 n_mid개, 하위 1/3은
+    n_weak개까지 후보로 남긴다 — 테마마다 무조건 같은 개수를 뽑던 예전 방식과 다르게,
+    RS가 강하고 넓게 오르는 테마일수록 자연히 더 많은 종목이 포함된다."""
     df = df.copy()
     df["combinedZ"] = 0.55 * df["longZ"] + 0.45 * df["shortZ"]
 
-    theme_rows, hold_rows = [], []
     grp_cols = ["market", "sector"]
+    prelim = []
     for (region, sector), g in df.groupby(grp_cols):
-        cand = g.sort_values("combinedZ", ascending=False).head(top_n)
-        cand = cand[cand["combinedZ"] > 0]
-        if cand.empty:
+        pos = g[g["combinedZ"] > 0]
+        if pos.empty:
             continue
+        raw_strength = float(pos["combinedZ"].sum())  # 테마의 '진짜' 강도(후보 수 제한 전, 전체 양수 합)
+        prelim.append({"region": region, "theme": sector, "pos": pos, "raw_strength": raw_strength})
+
+    # 강도 순으로 정렬 후 상/중/하위 1/3씩 후보 종목 수를 다르게 배정
+    prelim.sort(key=lambda t: -t["raw_strength"])
+    n = len(prelim)
+    theme_rows = []
+    for i, t in enumerate(prelim):
+        if n <= 2:
+            n_cand = n_strong if i == 0 else n_weak
+        else:
+            tier = i / n  # 0에 가까울수록 강한 테마
+            n_cand = n_strong if tier < 1 / 3 else (n_mid if tier < 2 / 3 else n_weak)
+        cand = t["pos"].sort_values("combinedZ", ascending=False).head(n_cand)
         strength = float(cand["combinedZ"].sum())
-        theme_rows.append({"region": region, "theme": sector, "strength": strength, "rows": cand})
+        theme_rows.append({"region": t["region"], "theme": t["theme"], "strength": strength, "rows": cand})
 
     total_strength = sum(t["strength"] for t in theme_rows) or 1.0
     theme_out, hold_out = [], []
@@ -455,7 +541,9 @@ def main():
     ap.add_argument("--portfolio-out", default="data/portfolio.json")
     ap.add_argument("--manual-in", default="data/manual.json", help="사용자가 직접 입력한 종목/비중")
     ap.add_argument("--manual-out", default="data/manual_portfolio.json")
-    ap.add_argument("--top-n-theme", type=int, default=TOP_N_PER_THEME)
+    ap.add_argument("--n-strong-theme", type=int, default=N_STRONG_THEME, help="상위 1/3 강도 테마의 후보 종목 수")
+    ap.add_argument("--n-mid-theme", type=int, default=N_MID_THEME, help="중위 1/3 강도 테마의 후보 종목 수")
+    ap.add_argument("--n-weak-theme", type=int, default=N_WEAK_THEME, help="하위 1/3 강도 테마의 후보 종목 수")
     ap.add_argument("--workers", type=int, default=MAX_WORKERS)
     args = ap.parse_args()
 
@@ -514,9 +602,10 @@ def main():
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(uni_payload, f, ensure_ascii=False, separators=(",", ":"))
 
-    theme_out, hold_out = build_portfolio(df, args.top_n_theme)
+    theme_out, hold_out = build_portfolio(df, args.n_strong_theme, args.n_mid_theme, args.n_weak_theme)
     pf_payload = {
-        "updated": updated, "topNPerTheme": args.top_n_theme,
+        "updated": updated,
+        "themeTiers": {"strong": args.n_strong_theme, "mid": args.n_mid_theme, "weak": args.n_weak_theme},
         "backend": "toss" if toss_client.enabled() else "fdr",
         "themes": theme_out, "holdings": hold_out,
     }
