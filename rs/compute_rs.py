@@ -88,6 +88,25 @@ TOP_N_PER_THEME = int(os.environ.get("TOP_N_PER_THEME", 3))  # 업종별 후보 
 MAX_WORKERS = int(os.environ.get("RS_MAX_WORKERS", 16))       # 동시 가격조회 스레드 수
 
 
+def _kr_etf_names():
+    """ETF_KR 코드 → 실제 상품명 매핑. fdr.StockListing('ETF/KR')(네이버 ETF 목록, KRX
+    endpoint가 아니라 별도 도메인)에서 실시간으로 받아온다 — 하드코딩하지 않는 이유는
+    ETF 상품명이 바뀌거나 새 ETF가 추가될 수 있어서다. 실패하면 빈 dict를 반환해서
+    상위에서 종목코드를 이름으로 그냥 쓰게(폴백) 한다."""
+    for attempt in range(2):
+        try:
+            df = fdr.StockListing("ETF/KR")
+            code_col = "Symbol" if "Symbol" in df.columns else df.columns[0]
+            name_col = "Name" if "Name" in df.columns else df.columns[1]
+            return {str(r[code_col]).zfill(6): str(r[name_col]) for _, r in df.iterrows()}
+        except Exception as e:
+            if attempt == 0:
+                time.sleep(2)
+            else:
+                print("[universe] ETF/KR 이름 조회 실패, 종목코드를 이름으로 사용:", e)
+    return {}
+
+
 def _kr_listing(market, top_n=None):
     """market: 'KOSPI' 또는 'KOSDAQ'. top_n을 주면 시가총액 상위 top_n개로만 자른다
     (예: KOSPI200 = _kr_listing('KOSPI', 200), KOSDAQ150 = _kr_listing('KOSDAQ', 150))."""
@@ -104,9 +123,31 @@ def _kr_listing(market, top_n=None):
     if k is None:
         print(f"[universe] {market} 실패(3회 재시도 후):", last_err)
         return []
+
+    # 중요: fdr.StockListing('KOSPI'/'KOSDAQ')는 시총/가격 컬럼(Marcap 등)만 주고
+    # 업종(Sector) 컬럼이 원래 없다 — 그래서 이전 버전은 한국 종목이 전부 "기타"로 떴다.
+    # 업종은 반드시 별도의 '...-DESC' 변형(KRX 상장회사 상세정보)에서 Code 기준으로 가져와야 한다.
+    sector_map = {}
+    for attempt in range(2):
+        try:
+            desc = fdr.StockListing(f"{market}-DESC")
+            code_col_d = "Code" if "Code" in desc.columns else desc.columns[0]
+            sec_col_d = next((c for c in ["Sector", "Industry"] if c in desc.columns), None)
+            if sec_col_d:
+                for _, r in desc.iterrows():
+                    c = str(r[code_col_d]).zfill(6)
+                    s = r.get(sec_col_d)
+                    if pd.notna(s) and str(s).strip():
+                        sector_map[c] = str(s).strip()
+            break
+        except Exception as e:
+            if attempt == 0:
+                time.sleep(2)
+            else:
+                print(f"[universe] {market}-DESC(업종) 조회 실패, 업종은 '기타'로 처리:", e)
+
     code_col = "Code" if "Code" in k.columns else k.columns[0]
     name_col = "Name" if "Name" in k.columns else k.columns[1]
-    sec_col = next((c for c in ["Sector", "Industry"] if c in k.columns), None)
     mc_col = next((c for c in ["Marcap", "MarketCap", "Amount"] if c in k.columns), None)
     if top_n and mc_col:
         k = k.sort_values(mc_col, ascending=False).head(top_n)
@@ -115,11 +156,12 @@ def _kr_listing(market, top_n=None):
     out = []
     for _, r in k.iterrows():
         code = str(r[code_col]).zfill(6)
-        sector = str(r[sec_col]).strip() if sec_col and pd.notna(r.get(sec_col)) else "기타"
+        sector = sector_map.get(code, "기타")
         marcap = r[mc_col] if mc_col and pd.notna(r.get(mc_col)) else None
-        out.append((code, str(r[name_col]), "한국", sector or "기타", marcap))
+        out.append((code, str(r[name_col]), "한국", sector, marcap))
     label = f"{market}{top_n}" if top_n else market
-    print(f"[universe] {label}: {len(out)}")
+    matched = sum(1 for c in out if c[3] != "기타")
+    print(f"[universe] {label}: {len(out)} (업종 매칭 {matched}/{len(out)})")
     return out
 
 
@@ -221,8 +263,9 @@ def build_universe(limit=None):
         for sym, name, sector in sp500:
             uni.append((sym, name, "미국", sector, None))
 
+    kr_etf_names = _kr_etf_names()
     for t in ETF_US: uni.append((t, t, "미국", "ETF", None))
-    for t in ETF_KR: uni.append((t, t, "한국", "ETF", None))
+    for t in ETF_KR: uni.append((t, kr_etf_names.get(t, t), "한국", "ETF", None))
 
     # dedup (코드 기준, 먼저 나온 항목 유지)
     seen, out = set(), []
