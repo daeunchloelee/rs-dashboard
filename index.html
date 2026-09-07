@@ -490,7 +490,8 @@ function renderComet(){
  // 라벨: 4분면(주도/개선/약화/소외)별로 |L|+|S| 상위 10개씩 — 한쪽 분면에만 라벨이 몰리지 않게
  const top=topByQuadrant(HOLD,h=>h[4],h=>h[5],h=>classify(h[4],h[5]),10);
  let labels="";top.forEach(h=>{const L=h[4],S=h[5];const lx=sx(L),ly=sy(S);
-   labels+=`<text x="${(lx+7).toFixed(1)}" y="${(ly+3).toFixed(1)}" font-size="10" font-weight="700" fill="#2a3354">${h[2]}</text>`;});
+   const lbl=h[0]==="한국"?h[3]:h[2]; // 한국은 종목명, 미국은 티커
+   labels+=`<text x="${(lx+7).toFixed(1)}" y="${(ly+3).toFixed(1)}" font-size="10" font-weight="700" fill="#2a3354">${lbl}</text>`;});
  const quad=(x,y,t,col)=>`<text x="${x}" y="${y}" font-size="12" font-weight="800" fill="${col}" opacity="0.5">${t}</text>`;
  const svg=`<svg width="100%" viewBox="0 0 ${W} ${H}" style="min-width:560px" role="img" aria-label="RS 코멧 차트">
    <rect x="${pad}" y="${pad}" width="${W-2*pad}" height="${H-2*pad}" fill="#fcfdff" stroke="#eef1f7"/>
@@ -606,7 +607,8 @@ function renderUniComet(){
  let dots=items.map(u=>`<circle cx="${sx(u.longZ).toFixed(1)}" cy="${sy(u.shortZ).toFixed(1)}" r="${small?2.3:4}" fill="${CLS[u.class]?CLS[u.class].hex:'#999'}" fill-opacity="${small?0.6:0.85}"/>`).join("");
  // 라벨: 4분면별로 |longZ|+|shortZ| 상위 10개씩(최대 40개) — 필터로 좁혀도 각 분면이 골고루 보이게
  const top=topByQuadrant(items,u=>u.longZ,u=>u.shortZ,u=>u.class,10);
- let labels=top.map(u=>`<text x="${(sx(u.longZ)+6).toFixed(1)}" y="${(sy(u.shortZ)+3).toFixed(1)}" font-size="9.5" font-weight="700" fill="#2a3354">${u.code}</text>`).join("");
+ let labels=top.map(u=>{const lbl=u.market==="한국"?u.name:u.code; // 한국은 종목명, 미국은 티커
+  return `<text x="${(sx(u.longZ)+6).toFixed(1)}" y="${(sy(u.shortZ)+3).toFixed(1)}" font-size="9.5" font-weight="700" fill="#2a3354">${lbl}</text>`;}).join("");
  const q=(x,y,t,c)=>`<text x="${x}" y="${y}" font-size="12" font-weight="800" fill="${c}" opacity="0.5">${t}</text>`;
  document.getElementById("uniComet").innerHTML=`<svg width="100%" viewBox="0 0 ${W} ${H}" style="min-width:560px" role="img" aria-label="유니버스 RS 코멧">
    <rect x="${pad}" y="${pad}" width="${W-2*pad}" height="${H-2*pad}" fill="#fcfdff" stroke="#eef1f7"/>
