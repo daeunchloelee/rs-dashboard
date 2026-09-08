@@ -26,6 +26,7 @@ import numpy as np
 import pandas as pd
 import requests
 import FinanceDataReader as fdr
+from scipy.stats import norm
 
 import toss_client
 
@@ -649,8 +650,21 @@ def main():
     df = pd.DataFrame(recs)
 
     def zscale(s):
-        sd = s.std(ddof=0) or 1.0
-        return ((s - s.mean()) / sd * 10).clip(-40, 40)
+        # 평균/표준편차 기반 z-score는 수익률 분포가 한쪽으로 치우치거나
+        # 꼬리가 두꺼우면(종목이 많을수록 흔함) 극단값이 아닌 종목들까지
+        # z>4~5로 튀어나와 -40~40 하드 클립에 무더기로 붙어버린다(코멧 차트에서
+        # 점들이 그래프 가장자리에 다닥다닥 붙는 원인).
+        # 대신 순위를 정규분포 분위수로 변환하는 rank-based z-score(rankit)를 쓴다:
+        # 값의 절대 크기가 아니라 "몇 등인지"만 보므로 이상치에 강하고,
+        # 표본 수(N)에 따라 자연스럽게 상한이 정해져(수백~수천 종목이면 대략 ±3.2~3.5,
+        # ×10 스케일 후 ±32~35) 클립에 거의 걸리지 않고 전체 구간에 고르게 퍼진다.
+        n = len(s)
+        if n <= 1:
+            return pd.Series(0.0, index=s.index)
+        r = s.rank(method="average")
+        p = (r - 0.5) / n  # 0과 1을 배제한 (0,1) 구간 백분위 (rankit)
+        z = norm.ppf(p) * 10
+        return pd.Series(z, index=s.index).clip(-40, 40)
 
     def pct99(s):
         return (s.rank(pct=True) * 98 + 1).round().astype(int)
