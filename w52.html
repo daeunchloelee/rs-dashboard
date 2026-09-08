@@ -97,7 +97,7 @@
       <a class="backlink" href="index.html">← 포트폴리오 대시보드로</a>
       <div class="eyebrow" style="margin-top:8px">Screener</div>
       <h1>52주 신고가 · 신저가</h1>
-      <div class="sub">코스피·코스닥 전체 + 한국 ETF 전체 + 미국 S&amp;P500 + 미국 주요 ETF · 종가 기준(하루 1회 갱신) · 갱신폭 상위 20 + 추정 사유</div>
+      <div class="sub">코스피·코스닥 전체 + 한국 ETF 전체 + 미국 S&amp;P500 + 미국 주요 ETF · 종가 기준(하루 1회 갱신) · 시장별 갱신폭 상위 20 + 추정 사유</div>
     </div>
     <div class="meta">
       <span id="srcBadge" class="badge">샘플 데이터</span>
@@ -135,13 +135,15 @@
   <div id="list"></div>
   <div class="note">
     <b>읽는 법</b> 최근 252거래일(≈52주) 종가 기준 최고가/최저가와 오늘 종가가 같은 종목 중,
-    <b>전고점/전저점 대비 갱신폭이 큰 순으로 하루 최대 상위 20개</b>만 남깁니다(근접 종목·후순위 종목은
-    제외). 시가총액 상위로 자르지 않은 코스피·코스닥 전체 종목이 대상이라 RS 포트폴리오 대시보드보다
-    스캔 종목 수는 훨씬 많고, 대신 <b>하루 한 번</b>(장 마감 후) 갱신됩니다 — 실시간 시세가 아닙니다.<br><br>
-    <b>사유 칸</b>은 그 종목 이름으로 자동 검색한 최신 관련 기사 1건(한국은 네이버 금융 뉴스,
-    미국은 Google 뉴스)을 그대로 보여주는 것으로, <b>사람이 원인을 확인/검증한 게 아니라 추정입니다</b> —
-    실제 등락 원인과 무관한 기사가 걸리거나, 관련 기사를 못 찾아 비어 있을 수 있습니다. 공시(DART) 연동은
-    아직 없습니다.
+    <b>시장(코스피/코스닥/한국 ETF/S&amp;P500/미국 ETF)별로 전고점/전저점 대비 갱신폭이 큰 순
+    상위 20개씩</b>만 남깁니다(시장을 안 나누면 종목 수가 많은 코스피·코스닥이 결과를 독차지해서
+    작은 시장은 하나도 안 뽑히는 문제가 있었습니다). 시가총액 상위로 자르지 않은 코스피·코스닥
+    전체 종목이 대상이라 RS 포트폴리오 대시보드보다 스캔 종목 수는 훨씬 많고, 대신
+    <b>하루 한 번</b>(장 마감 후) 갱신됩니다 — 실시간 시세가 아닙니다.<br><br>
+    <b>사유 칸</b>은 그 종목 이름으로 자동 검색한 최신 관련 기사 1건(Google 뉴스, 한국 종목은
+    안 찾아지면 네이버 금융 뉴스도 보조로 시도)을 그대로 보여주는 것으로,
+    <b>사람이 원인을 확인/검증한 게 아니라 추정입니다</b> — 실제 등락 원인과 무관한 기사가
+    걸리거나, 관련 기사를 못 찾아 비어 있을 수 있습니다. 공시(DART) 연동은 아직 없습니다.
   </div>
 
 </div>
@@ -229,8 +231,8 @@ function renderKpis(){
   const totH = DATA.totalHigh52 ?? DATA.countHigh52 ?? DATA.items.filter(u=>u.isHigh52).length;
   const totL = DATA.totalLow52 ?? DATA.countLow52 ?? DATA.items.filter(u=>u.isLow52).length;
   box.innerHTML=`
-   <div class="kpi" style="--accent:#1f8a5b"><div class="lbl">52주 신고가 (상위 ${topN})</div><div class="big num">${DATA.countHigh52??DATA.items.filter(u=>u.isHigh52).length}<span>/ 전체 ${totH}종목</span></div></div>
-   <div class="kpi" style="--accent:#c0394f"><div class="lbl">52주 신저가 (상위 ${topN})</div><div class="big num">${DATA.countLow52??DATA.items.filter(u=>u.isLow52).length}<span>/ 전체 ${totL}종목</span></div></div>`;
+   <div class="kpi" style="--accent:#1f8a5b"><div class="lbl">52주 신고가 (시장별 상위 ${topN})</div><div class="big num">${DATA.countHigh52??DATA.items.filter(u=>u.isHigh52).length}<span>/ 전체 ${totH}종목</span></div></div>
+   <div class="kpi" style="--accent:#c0394f"><div class="lbl">52주 신저가 (시장별 상위 ${topN})</div><div class="big num">${DATA.countLow52??DATA.items.filter(u=>u.isLow52).length}<span>/ 전체 ${totL}종목</span></div></div>`;
 }
 
 function reasonCell(u){
@@ -266,7 +268,7 @@ function renderList(){
   const arrow = k => state.sort===k ? (state.sortDir==="asc"?" ▲":" ▼") : "";
   box.innerHTML = `<div class="htbl">
     <div class="rhead"><span class="tag" style="background:${hex}">${dir==="high"?"신고가":"신저가"}</span>
-      <span class="name">${dir==="high"?"52주 신고가":"52주 신저가"} 종목</span><span class="cnt">상위 ${items.length}종목</span></div>
+      <span class="name">${dir==="high"?"52주 신고가":"52주 신저가"} 종목</span><span class="cnt">${items.length}종목 (시장별 상위 20)</span></div>
     <div class="scroller"><table><thead><tr>
       <th style="cursor:default">종목</th><th style="text-align:left;cursor:default">시장</th>
       <th class="${sortCls('last')}" data-sortkey="last">현재가${arrow('last')}</th>
