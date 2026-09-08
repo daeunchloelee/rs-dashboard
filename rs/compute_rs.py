@@ -167,14 +167,69 @@ def _map_kr_theme(raw_sector, raw_industry=""):
     return None  # 매칭 실패 — 호출부에서 '기타' 처리 + 원본 업종명 로깅
 
 
+_KRX_CACHE_BASE = "https://raw.githubusercontent.com/FinanceData/fdr_krx_data_cache/refs/heads/master/data/listing"
+_KRX_MARKET_ID = {"KOSPI": "STK", "KOSDAQ": "KSQ", "KONEX": "KNX"}
+
+
+def _krx_max_work_dt():
+    """KRX가 제공하는 '가장 최근 거래일'(max_work_dt)을 조회한다. FinanceDataReader가
+    fdr.StockListing('KOSPI'/'KOSDAQ') 내부에서 쓰는 것과 같은 엔드포인트. 실패하면 None을
+    반환해서 호출부가 오늘 날짜부터 대신 걸어 내려가게 한다."""
+    url = ("http://data.krx.co.kr/comm/bldAttendant/executeForResourceBundle.cmd"
+           "?baseName=krx.mdc.i18n.component&key=B128.bld")
+    try:
+        r = requests.get(url, timeout=10)
+        j = r.json()
+        date_str = j["result"]["output"][0]["max_work_dt"]
+        return datetime.strptime(date_str, "%Y%m%d")
+    except Exception as e:
+        print("[universe] KRX 최근거래일 조회 실패(오늘 날짜부터 대신 시도):", e)
+        return None
+
+
+def _fetch_krx_cache_csv(kind, start_date, max_back_days=10):
+    """FinanceDataReader가 실제 데이터를 받아오는 GitHub 캐시 저장소
+    (FinanceData/fdr_krx_data_cache)에서 kind('krx' 또는 'desc') CSV를 받는다.
+    이 캐시 저장소는 KRX의 '최근거래일'(max_work_dt)과는 별개로 자체적으로 하루 단위로
+    (비동기로) 갱신되기 때문에, 최근거래일 날짜의 파일이 아직 안 올라와 있으면 그 날짜로는
+    HTTP 404가 난다 — 예전 버전은 이 404를 그냥 실패로 처리해서 한국 종목이 통째로
+    빠지는 문제가 있었다. 그래서 최근거래일부터 하루씩 걸어 내려가며 실제로 존재하는
+    가장 최근 캐시 파일을 찾는다(시총 순위/업종 분류는 어차피 매일 크게 안 바뀌므로
+    하루이틀 전 데이터를 써도 문제없다)."""
+    d = start_date
+    last_err = None
+    for i in range(max_back_days):
+        date_str = d.strftime("%Y-%m-%d")
+        url = f"{_KRX_CACHE_BASE}/{kind}/{date_str}.csv"
+        try:
+            dtype = ({"Code": str, "Dept": str, "ChangeCode": str, "MarketId": str}
+                      if kind == "krx" else {"Code": str})
+            df = pd.read_csv(url, index_col=0, dtype=dtype)
+            df = df.reset_index(drop=True)
+            if i > 0:
+                print(f"[universe] {kind} 캐시: {start_date.strftime('%Y-%m-%d')} 없음 "
+                      f"→ {date_str}로 대체")
+            return df, date_str
+        except Exception as e:
+            last_err = e
+            d = d - timedelta(days=1)
+    raise last_err or RuntimeError(f"{kind} 캐시: {max_back_days}일 내 사용 가능한 파일 없음")
+
+
 def _kr_listing(market, top_n=None):
     """market: 'KOSPI' 또는 'KOSDAQ'. top_n을 주면 시가총액 상위 top_n개로만 자른다
-    (예: KOSPI200 = _kr_listing('KOSPI', 200), KOSDAQ150 = _kr_listing('KOSDAQ', 150))."""
+    (예: KOSPI200 = _kr_listing('KOSPI', 200), KOSDAQ150 = _kr_listing('KOSDAQ', 150)).
+    fdr.StockListing()을 그대로 쓰지 않고 그 내부가 읽는 GitHub 캐시를 직접 날짜-폴백과
+    함께 읽는다(위 _fetch_krx_cache_csv 참고) — 캐시 파일이 최근거래일 기준으로 아직 안
+    올라와 있어서 나는 404를 재시도로는 못 피하기 때문."""
+    mkt_id = _KRX_MARKET_ID.get(market)
     k = None
     last_err = None
     for attempt in range(3):
         try:
-            k = fdr.StockListing(market)
+            start_date = _krx_max_work_dt() or datetime.now()
+            raw, _used_date = _fetch_krx_cache_csv("krx", start_date)
+            k = raw[raw["MarketId"] == mkt_id].reset_index(drop=True) if mkt_id else raw
             break
         except Exception as e:
             last_err = e
@@ -184,14 +239,16 @@ def _kr_listing(market, top_n=None):
         print(f"[universe] {market} 실패(3회 재시도 후):", last_err)
         return []
 
-    # 중요: fdr.StockListing('KOSPI'/'KOSDAQ')는 시총/가격 컬럼(Marcap 등)만 주고
-    # 업종(Sector) 컬럼이 원래 없다 — 그래서 이전 버전은 한국 종목이 전부 "기타"로 떴다.
-    # 업종은 반드시 별도의 '...-DESC' 변형(KRX 상장회사 상세정보)에서 Code 기준으로 가져와야 한다.
+    # 중요: 위 krx 캐시는 시총/가격 컬럼(Marcap 등)만 주고 업종(Sector) 컬럼이 원래 없다
+    # — 그래서 이전 버전은 한국 종목이 전부 "기타"로 떴다. 업종은 반드시 별도의 desc
+    # 캐시(KRX 상장회사 상세정보)에서 Code 기준으로 가져와야 한다.
     sector_map = {}
     unmapped_raw = {}  # 테마 매핑에 안 걸린 원본 KRX 업종명 → 등장 횟수 (로그 확인용)
     for attempt in range(2):
         try:
-            desc = fdr.StockListing(f"{market}-DESC")
+            start_date = _krx_max_work_dt() or datetime.now()
+            desc_raw, _used_date = _fetch_krx_cache_csv("desc", start_date)
+            desc = desc_raw[desc_raw["Market"] == market].reset_index(drop=True)
             code_col_d = "Code" if "Code" in desc.columns else desc.columns[0]
             has_sec = "Sector" in desc.columns
             has_ind = "Industry" in desc.columns
