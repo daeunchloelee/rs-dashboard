@@ -107,6 +107,30 @@ General → Workflow permissions → Read and write permissions** 를 켭니다.
 **Settings → Pages → Source: Deploy from a branch, Branch: main/(root)** → Save.
 1~2분 뒤 `https://<아이디>.github.io/rs-dashboard/` 주소가 생깁니다.
 
+### 7. (선택) 52주 신고가·신저가 화면 첫 실행
+
+`https://<아이디>.github.io/rs-dashboard/w52.html` — 아래 "별도 화면" 참고. **Actions →
+52주 신고가·신저가 갱신 → Run workflow** 를 한 번 실행해야 `data/w52.json`이 생기고
+샘플 대신 실제 데이터가 뜹니다.
+
+## 별도 화면 — 52주 신고가·신저가 스크리너 (`w52.html`)
+
+메인 대시보드(`index.html`)는 그대로 두고, **완전히 독립된 화면**으로 만들었습니다
+(`w52.html` ← `data/w52.json` ← `rs/compute_52w.py` ← `.github/workflows/w52.yml`).
+서로의 코드/데이터/워크플로를 전혀 건드리지 않습니다.
+
+- **대상**: 코스피 전체 + 코스닥 전체(시가총액 제한 없음, 메인 대시보드의 코스피200/코스닥150보다
+  훨씬 넓음) + 한국 상장 ETF 전체 + 미국 S&P500 + 미국 주요 ETF(메인과 같은 39개 리스트 —
+  FinanceDataReader가 해외 ETF 전체 목록 조회를 지원하지 않아 이 부분만 curated 리스트를 씁니다).
+- **계산**: RS(장기/단기 상대강도)는 계산하지 않고, 오직 **종가 기준** 최근 252거래일(≈52주)
+  최고가/최저가만 봅니다. 오늘 종가가 그 최고가/최저가와 같으면 신고가/신저가로 표시합니다.
+- **갱신 주기**: **하루 한 번**(평일 21:30 UTC = 다음날 06:30 KST, 한국·미국 장 마감 후).
+  종목 수가 훨씬 많아서(코스피+코스닥 전체 스캔) 메인 대시보드처럼 매시간 돌리면 시간이 오래
+  걸리는데, 애초에 실시간이 필요 없는 화면이라 하루 한 번으로 충분합니다.
+- **데이터 크기 절약**: 스캔한 전 종목을 다 담지 않고, 실제로 신고가/신저가인 종목만
+  `data/w52.json`에 저장합니다(전체를 다 담고 싶으면 `compute_52w.py --keep-all` 옵션).
+- 화면 안에서 시장(코스피/코스닥/한국 ETF/S&P500/미국 ETF)별 필터, 검색, 정렬을 지원합니다.
+
 ## 자주 손대는 곳
 
 - **갱신 주기**: `.github/workflows/rs.yml` 의 `cron`. 기본은 평일 장중(한국장+미국장) 매시 정각.
@@ -119,6 +143,8 @@ General → Workflow permissions → Read and write permissions** 를 켭니다.
   `--n-weak-theme` 인자로.
 - **동시 실행 스레드 수**: `RS_MAX_WORKERS` 환경변수 (기본 16) — 너무 크면 시세 소스가 차단할 수 있음.
 - **대시보드 데이터 경로**: `index.html` 의 `CONFIG.PORTFOLIO_JSON_URL` / `CONFIG.UNIVERSE_JSON_URL`.
+- **52주 신고가·신저가 갱신 주기/동시성**: `.github/workflows/w52.yml` 의 `cron`(기본 하루 한 번),
+  `rs/compute_52w.py` 의 `W52_MAX_WORKERS` 환경변수(기본 24).
 
 ## 빠른 테스트
 
