@@ -191,6 +191,7 @@
     <button data-view="detail" aria-pressed="false">종목 상세 · RS</button>
     <button data-view="universe" aria-pressed="false">유니버스 RS</button>
     <button data-view="momentum" aria-pressed="false">RS 변화 Top</button>
+    <button data-view="w52" aria-pressed="false">52주 신고가·신저가</button>
   </div>
 
   <!-- ============ THEME VIEW ============ -->
@@ -338,7 +339,25 @@
     <div class="mom-grid" id="momentum"></div>
   </section>
 
-
+  <!-- ============ 52주 신고가·신저가 VIEW ============ -->
+  <section id="w52View" class="hidden">
+    <div class="panel">
+      <h2>52주 신고가 · 신저가</h2>
+      <div class="ph-sub">최근 252거래일(≈52주) 종가 기준 · 오늘 종가가 그 기간의 최고가/최저가와 같으면 신고가/신저가 · <span id="w52Meta">샘플</span></div>
+    </div>
+    <div class="controls">
+      <span class="ctl-label">시장</span>
+      <div class="seg" id="w52MktSeg" role="group" aria-label="시장 필터">
+        <button data-w52mkt="all" aria-pressed="true">전체</button>
+        <button data-w52mkt="kr_stock" aria-pressed="false">한국 대형주</button>
+        <button data-w52mkt="kr_etf" aria-pressed="false">한국 ETF</button>
+        <button data-w52mkt="us_stock" aria-pressed="false">미국 대형주</button>
+        <button data-w52mkt="us_etf" aria-pressed="false">미국 ETF</button>
+      </div>
+    </div>
+    <div class="mom-grid" id="w52"></div>
+    <div class="note"><span><b>읽는 법</b> "고점 대비"/"저점 대비"는 오늘 종가가 52주 최고가/최저가 대비 몇 % 위치인지입니다(신고가는 항상 0.0%, 신저가도 항상 0.0%). RS 등급 배지는 다른 화면과 같은 4분면 기준입니다.</span></div>
+  </section>
 
 </div>
 
@@ -427,7 +446,7 @@ function normCdf(z){const t=1/(1+0.2316419*Math.abs(z));const d=0.3989423*Math.e
 function rsScore(L,S){return Math.max(1,Math.min(99,Math.round(normCdf((0.55*L+0.45*S)/15)*98)+1));}
 
 let DATA=SNAPSHOT.slice(), HOLD=HOLD_SNAP.slice(), UNI=[];
-let state={view:"theme",pf:"auto",reg:"all",hreg:"한국",sort:"theme",umkt:"all",usort:"strong",mbasis:"short",mmkt:"all"};
+let state={view:"theme",pf:"auto",reg:"all",hreg:"한국",sort:"theme",umkt:"all",usort:"strong",mbasis:"short",mmkt:"all",w52mkt:"all"};
 let uniLoaded=false;
 
 /* ---------- 유틸 ---------- */
@@ -575,9 +594,15 @@ UNI_SAMPLE.forEach(u=>{ if(u.dShort===undefined){
   u.pShortZ=+(u.shortZ-u.dShort*0.22).toFixed(1);
   u.pLongZ =+(u.longZ -u.dLong*0.22).toFixed(1);
 }});
+// 샘플에 52주 신고가/신저가 보강 — 미리보기용(실제 값은 Actions 실행 후 rs.json에서 옴).
+// 강한 종목 몇 개는 신고가로, 가장 약한 종목 몇 개는 신저가로 표시.
+UNI_SAMPLE.forEach(u=>{ if(u.isHigh52===undefined){ u.isHigh52=false; u.isLow52=false; u.pctFromHigh=-Math.random()*15-1; u.pctFromLow=Math.random()*20+1; }});
+["000660","011070","MRVL","DELL"].forEach(c=>{const u=UNI_SAMPLE.find(x=>x.code===c);if(u){u.isHigh52=true;u.pctFromHigh=0;}});
+["006110","CIEN"].forEach(c=>{const u=UNI_SAMPLE.find(x=>x.code===c);if(u){u.isLow52=true;u.pctFromLow=0;}});
 async function loadUniverse(){
  const meta=document.getElementById("uniMeta");
  const mMeta=document.getElementById("momMeta"), mLag=document.getElementById("momLag");
+ const wMeta=document.getElementById("w52Meta");
  try{
   const r=await fetch(CONFIG.UNIVERSE_JSON_URL,{cache:"no-store"});
   if(!r.ok)throw new Error("no file");
@@ -586,7 +611,8 @@ async function loadUniverse(){
   meta.textContent=`전체 ${j.count||UNI.length}종목 · 업데이트 ${j.updated||""}`;
   if(mMeta)mMeta.textContent=`전체 ${j.count||UNI.length}종목 · 업데이트 ${j.updated||""}`;
   if(mLag&&j.lag)mLag.textContent=j.lag;
- }catch(e){ UNI=UNI_SAMPLE.slice(); uniLoaded=false; meta.textContent="샘플 (Actions 실행 전)"; if(mMeta)mMeta.textContent="샘플"; }
+  if(wMeta)wMeta.textContent=`전체 ${j.count||UNI.length}종목 · 업데이트 ${j.updated||""}`;
+ }catch(e){ UNI=UNI_SAMPLE.slice(); uniLoaded=false; meta.textContent="샘플 (Actions 실행 전)"; if(mMeta)mMeta.textContent="샘플"; if(wMeta)wMeta.textContent="샘플 (Actions 실행 전)"; }
 }
 function uniFiltered(){
  const isEtf=u=>u.sector==="ETF";
@@ -698,15 +724,54 @@ function renderMomentum(){
 }
 async function renderMomentumView(){ if(!UNI.length) await loadUniverse(); renderMomentum(); }
 
+/* ---------- 52주 신고가·신저가 ---------- */
+function w52Filtered(){
+ const isEtf=u=>u.sector==="ETF";
+ switch(state.w52mkt){
+  case "kr_stock": return UNI.filter(u=>u.market==="한국"&&!isEtf(u));
+  case "kr_etf":   return UNI.filter(u=>u.market==="한국"&&isEtf(u));
+  case "us_stock": return UNI.filter(u=>u.market==="미국"&&!isEtf(u));
+  case "us_etf":   return UNI.filter(u=>u.market==="미국"&&isEtf(u));
+  default: return UNI;
+ }
+}
+function w52Row(u,dir){
+ const C=CLS[u.class]||CLS.none;
+ const pct=dir==="high"?u.pctFromHigh:u.pctFromLow;
+ const ptxt=(pct===undefined||pct===null||isNaN(pct))?"–":`${pct>0?'+':''}${(+pct).toFixed(1)}%`;
+ return `<tr>
+  <td><span class="nm">${u.name}</span><span class="code">${u.code}</span></td>
+  <td class="metric" style="color:#8a90a0">${u.market}</td>
+  <td><span class="rs-pill" style="background:${C.hex}">${C.ko}</span></td>
+  <td class="metric">${ptxt}</td></tr>`;
+}
+function w52Table(title,rows,dir,hex){
+ if(!rows.length)return `<div class="htbl"><div class="rhead"><span class="tag" style="background:${hex}">${dir==="high"?"신고가":"신저가"}</span><span class="name" style="color:${hex}">${title}</span></div><div class="empty" style="border:0;box-shadow:none;padding:22px">해당 조건의 종목이 없어요.</div></div>`;
+ const head=dir==="high"?"고점 대비":"저점 대비";
+ return `<div class="htbl"><div class="rhead"><span class="tag" style="background:${hex}">${dir==="high"?"신고가":"신저가"}</span><span class="name" style="color:${hex}">${title}</span><span class="cnt">${rows.length}종목</span></div>
+  <div class="scroller"><table style="min-width:300px"><thead><tr><th>종목</th><th>시장</th><th>등급</th><th>${head}</th></tr></thead><tbody>${rows.map(u=>w52Row(u,dir)).join("")}</tbody></table></div></div>`;
+}
+function renderW52(){
+ const box=document.getElementById("w52");
+ if(!UNI.length){box.innerHTML="";return;}
+ const items=w52Filtered();
+ const highs=items.filter(u=>u.isHigh52).sort((a,b)=>(b.longRS+b.shortRS)-(a.longRS+a.shortRS));
+ const lows=items.filter(u=>u.isLow52).sort((a,b)=>(a.longRS+a.shortRS)-(b.longRS+b.shortRS));
+ box.innerHTML=w52Table(`52주 신고가`,highs,"high","#1f8a5b")+w52Table(`52주 신저가`,lows,"low","#c0394f");
+}
+async function renderW52View(){ if(!UNI.length) await loadUniverse(); renderW52(); }
+
 /* ---------- 화면 전환 ---------- */
 function setView(v){state.view=v;
  document.getElementById("themeView").classList.toggle("hidden",v!=="theme");
  document.getElementById("detailView").classList.toggle("hidden",v!=="detail");
  document.getElementById("universeView").classList.toggle("hidden",v!=="universe");
  document.getElementById("momentumView").classList.toggle("hidden",v!=="momentum");
+ document.getElementById("w52View").classList.toggle("hidden",v!=="w52");
  if(v==="detail"){renderComet();renderHoldings();}
  else if(v==="universe"){renderUniverse();}
  else if(v==="momentum"){renderMomentumView();}
+ else if(v==="w52"){renderW52View();}
  else{renderCards();renderRegions();}}
 
 /* ---------- 로드 ---------- */
@@ -758,6 +823,7 @@ async function load(){
  if(state.view==="detail"){renderComet();renderHoldings();}
  else if(state.view==="universe"){renderUniverse();}
  else if(state.view==="momentum"){renderMomentumView();}
+ else if(state.view==="w52"){renderW52View();}
  else{renderCards();renderRegions();}
 }
 
@@ -767,6 +833,7 @@ function wireSeg(id,key,attr){document.getElementById(id).addEventListener("clic
  if(state.view==="detail"){renderComet();renderHoldings();}
  else if(state.view==="universe"){renderUniComet();renderUniTable();}
  else if(state.view==="momentum"){renderMomentum();}
+ else if(state.view==="w52"){renderW52();}
  else{renderCards();renderRegions();}});}
 document.getElementById("pfSeg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
  state.pf=b.dataset.pf;[...e.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));
@@ -777,6 +844,7 @@ document.querySelector(".viewtabs").addEventListener("click",e=>{const b=e.targe
 wireSeg("regSeg","reg","reg");wireSeg("hRegSeg","hreg","hreg");wireSeg("hSortSeg","sort","sort");
 wireSeg("uniMktSeg","umkt","umkt");wireSeg("uniSortSeg","usort","usort");
 wireSeg("momBasisSeg","mbasis","mbasis");wireSeg("momMktSeg","mmkt","mmkt");
+wireSeg("w52MktSeg","w52mkt","w52mkt");
 document.getElementById("refresh").addEventListener("click",()=>{uniLoaded=false;UNI=[];load();});
 load();
 if(CONFIG.REFRESH_MINUTES>0)setInterval(load,CONFIG.REFRESH_MINUTES*60000);
