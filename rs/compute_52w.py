@@ -19,10 +19,21 @@ RS 대시보드보다 훨씬 넓은 유니버스를 스캔할 수 있다:
 
 결과는 data/w52.json 하나만 만든다 (data/rs.json, data/portfolio.json 등 RS 대시보드가
 쓰는 파일은 손대지 않는다).
+
+신고가/신저가 종목이 많은 날엔 "돌파/붕괴 강도"(오늘을 뺀 52주 구간의 이전 최고/최저 대비
+오늘 종가가 몇 % 위/아래인지) 순으로 하루 최대 --top-n(기본 20)개까지만 남기고, 각 종목마다
+'사유' 칸을 자동으로 채운다 — 한국 종목은 네이버 금융 뉴스, 미국 종목은 Google 뉴스 RSS에서
+그 종목 이름으로 검색한 최신 헤드라인 1건을 그대로 붙인다. 사람이 실제로 원인을 검증한 게
+아니라 '이 종목 이름으로 최근 뜬 기사'일 뿐이므로 추정치다(공시/DART 연동은 종목코드→
+corp_code 매핑이 추가로 필요해서 아직 안 함 — 필요하면 나중에 추가 가능).
 """
-import json, time, sys, argparse, os, warnings
+import json, time, sys, argparse, os, warnings, urllib.parse
+import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta
 from concurrent.futures import ThreadPoolExecutor, as_completed
+
+import requests
+from bs4 import BeautifulSoup
 
 warnings.simplefilter("ignore")
 
@@ -31,6 +42,7 @@ import compute_rs as cr  # 임포트만으로 requests 헤더 우회 몽키패�
 import FinanceDataReader as fdr
 
 MAX_WORKERS = int(os.environ.get("W52_MAX_WORKERS", 24))  # 유니버스가 훨씬 커서 RS보다 동시성을 높임
+TOP_N = int(os.environ.get("W52_TOP_N", 20))  # 신고가/신저가 각각 하루에 몇 종목까지 남길지
 
 
 def _kr_etf_listing_all():
@@ -90,13 +102,84 @@ def _process_one(args):
     hi, lo, pct_from_high, pct_from_low, is_high, is_low = cr.week52(close)
     if hi is None:
         return None
+    # 돌파/붕괴 강도 — 오늘을 뺀 52주 구간의 이전 최고/최저 대비 오늘 종가가 몇 % 위/아래인지.
+    # 신고가/신저가 종목이 많을 때 "얼마나 강하게 갱신했는지" 기준으로 상위 N개를 추리는 데 쓴다
+    # (신고가 종목은 전부 pctFromHigh=0이라 그 값만으로는 순위를 못 매김).
+    window = close.iloc[-252:] if len(close) > 252 else close
+    prev_window = window.iloc[:-1]
+    breakout_pct = breakdown_pct = None
+    if len(prev_window) >= 5:
+        last = float(close.iloc[-1])
+        prev_hi, prev_lo = float(prev_window.max()), float(prev_window.min())
+        if prev_hi > 0:
+            breakout_pct = round((last / prev_hi - 1.0) * 100, 2)   # 신고가일 때만 의미 있음(양수)
+        if prev_lo > 0:
+            breakdown_pct = round((last / prev_lo - 1.0) * 100, 2)  # 신저가일 때만 의미 있음(음수)
     return {
         "code": code, "name": name, "market": region, "sector": sector, "exchange": exchange,
         "last": round(float(close.iloc[-1]), 4),
         "high52": round(hi, 4), "low52": round(lo, 4),
         "pctFromHigh": pct_from_high, "pctFromLow": pct_from_low,
         "isHigh52": is_high, "isLow52": is_low,
+        "breakoutPct": breakout_pct, "breakdownPct": breakdown_pct,
     }
+
+
+def _kr_news_headline(code):
+    """네이버 금융 종목 뉴스 목록에서 가장 최근 헤드라인 1건을 가져온다(공식 API가 아니라
+    화면 HTML을 파싱 — compute_rs 임포트로 이미 적용된 브라우저 헤더 우회를 그대로 씀).
+    실패하거나 뉴스가 없으면 None — 호출부에서 '사유 없음'으로 처리한다."""
+    url = f"https://finance.naver.com/item/news_news.naver?code={code}&page=1"
+    try:
+        r = requests.get(url, timeout=8)
+        r.encoding = r.apparent_encoding or "euc-kr"  # 페이지 인코딩이 바뀌어도 최대한 안 깨지게
+        soup = BeautifulSoup(r.text, "html.parser")
+        a = (soup.select_one("table.type5 td.title a")
+             or soup.select_one("td.title a")
+             or soup.select_one(".tb_cont a"))
+        if not a:
+            return None
+        title = a.get_text(strip=True)
+        if not title:
+            return None
+        href = a.get("href", "")
+        link = ("https://finance.naver.com" + href) if href.startswith("/") else href
+        return {"title": title, "url": link, "source": "네이버 금융 뉴스"}
+    except Exception:
+        return None
+
+
+def _us_news_headline(code, name):
+    """Google 뉴스 RSS에서 회사명으로 검색한 최신 헤드라인 1건. 실패/무결과 시 None."""
+    q = urllib.parse.quote(f"{name} stock")
+    url = f"https://news.google.com/rss/search?q={q}&hl=en-US&gl=US&ceid=US:en"
+    try:
+        r = requests.get(url, timeout=8)
+        root = ET.fromstring(r.content)
+        item = root.find("./channel/item")
+        if item is None:
+            return None
+        title = (item.findtext("title") or "").strip()
+        link = (item.findtext("link") or "").strip()
+        if not title:
+            return None
+        return {"title": title, "url": link, "source": "Google 뉴스"}
+    except Exception:
+        return None
+
+
+def attach_reason(rec):
+    """신고가/신저가 '사유' 칸에 쓸 관련 기사를 자동 검색해서 붙인다. 공시(DART)까지는 아직
+    연동 안 함 — 종목코드→DART corp_code 매핑(별도 마스터 파일 다운로드/파싱)이 필요해서
+    비용 대비 지금은 뉴스 헤드라인만으로 충분하다고 판단(추정 사유로도 괜찮다고 하셨음).
+    나중에 원하면 공시 연동을 추가할 수 있다. 찾은 기사는 실제 원인이 맞다고 검증된 게
+    아니라 '이 종목 이름으로 최근 뜬 기사'일 뿐이라 어디까지나 추정이다."""
+    try:
+        news = _kr_news_headline(rec["code"]) if rec["market"] == "한국" else _us_news_headline(rec["code"], rec["name"])
+    except Exception:
+        news = None
+    rec["reason"] = news
+    return rec
 
 
 def main():
@@ -104,8 +187,9 @@ def main():
     ap.add_argument("--limit", type=int, default=None, help="테스트용 종목 수 제한")
     ap.add_argument("--out", default="data/w52.json")
     ap.add_argument("--workers", type=int, default=MAX_WORKERS)
-    ap.add_argument("--keep-all", action="store_true",
-                     help="신고가/신저가 종목만 남기지 않고 스캔한 전 종목을 결과에 포함 (파일이 커짐)")
+    ap.add_argument("--top-n", type=int, default=TOP_N, help="신고가/신저가 각각 하루 최대 종목 수")
+    ap.add_argument("--news-workers", type=int, default=8, help="사유(관련 기사) 조회 동시 실행 수")
+    ap.add_argument("--no-reason", action="store_true", help="사유(관련 기사 자동 검색) 생략(속도 우선)")
     args = ap.parse_args()
 
     uni = build_universe(args.limit)
@@ -129,25 +213,37 @@ def main():
         print("[error] 가격을 가져온 종목이 없습니다.")
         sys.exit(1)
 
-    highs = [r for r in recs if r["isHigh52"]]
-    lows = [r for r in recs if r["isLow52"]]
-    # 스크리너 용도라 신고가/신저가 종목만 저장한다(전체 스캔 결과를 다 담으면 파일이 너무
-    # 커진다 — --keep-all 을 주면 전체를 담아서 나중에 "근접" 기능을 붙이고 싶을 때 쓸 수 있다).
-    items = recs if args.keep_all else (highs + lows)
+    highs_all = [r for r in recs if r["isHigh52"]]
+    lows_all = [r for r in recs if r["isLow52"]]
+    # 신고가/신저가 종목이 많은 날엔 "얼마나 강하게 갱신했는지"(breakoutPct/breakdownPct) 순으로
+    # 하루 --top-n(기본 20)개까지만 남긴다 — 사유 조회(뉴스 검색)도 이 개수만큼만 수행해서
+    # 요청 수를 억제한다.
+    highs_all.sort(key=lambda r: (r["breakoutPct"] if r["breakoutPct"] is not None else -1e9), reverse=True)
+    lows_all.sort(key=lambda r: (r["breakdownPct"] if r["breakdownPct"] is not None else 1e9))
+    highs = highs_all[:args.top_n]
+    lows = lows_all[:args.top_n]
+
+    if not args.no_reason:
+        picked = highs + lows
+        with ThreadPoolExecutor(max_workers=args.news_workers) as ex:
+            list(ex.map(attach_reason, picked))
+        found = sum(1 for r in picked if r.get("reason"))
+        print(f"[w52] 관련 기사(사유) 자동 검색: {found}/{len(picked)}건 발견")
 
     updated = datetime.now().isoformat(timespec="minutes")
     payload = {
         "updated": updated,
         "scanned": len(recs),
-        "countHigh52": len(highs),
-        "countLow52": len(lows),
-        "items": items,
+        "totalHigh52": len(highs_all), "totalLow52": len(lows_all),  # 상위 N으로 자르기 전 전체 건수
+        "countHigh52": len(highs), "countLow52": len(lows),          # 실제로 담긴 건수 (<= top-n)
+        "topN": args.top_n,
+        "items": highs + lows,
     }
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w", encoding="utf-8") as f:
         json.dump(payload, f, ensure_ascii=False, separators=(",", ":"))
     print(f"[done] 스캔 {len(recs)}종목(성공 {ok}/실패 {fail}) → {args.out} "
-          f"(신고가 {len(highs)} · 신저가 {len(lows)})")
+          f"(신고가 {len(highs)}/{len(highs_all)} · 신저가 {len(lows)}/{len(lows_all)}, 상위 {args.top_n})")
 
 
 if __name__ == "__main__":
