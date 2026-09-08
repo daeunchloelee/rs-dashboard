@@ -1,0 +1,50 @@
+name: 52주 신고가·신저가 갱신
+
+on:
+  schedule:
+    # 하루 한 번, 한국장(15:30 KST 마감)·미국장(21:00~22:00 UTC 마감, 서머타임 근사) 둘 다
+    # 끝난 뒤 21:30 UTC(=다음날 06:30 KST)에 실행. 실시간이 필요 없다는 요청에 따라 이 화면은
+    # RS 대시보드(rs.yml, 매시 갱신)와 별개로 훨씬 낮은 빈도로 돈다.
+    - cron: "30 21 * * 1-5"
+  workflow_dispatch: {}
+
+concurrency:
+  group: w52-update
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    # 코스피+코스닥 전체(시총 제한 없음) + 한국 ETF 전체 + S&P500 + 미국 ETF라 RS 대시보드보다
+    # 스캔 종목 수가 훨씬 많다 — 넉넉하게 시간을 잡는다.
+    timeout-minutes: 240
+    steps:
+      - name: 체크아웃
+        uses: actions/checkout@v4
+
+      - name: 파이썬 설치
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: 52주 신고가·신저가 계산
+        working-directory: rs
+        run: python compute_52w.py --out ../data/w52.json
+
+      - name: 결과 커밋
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/w52.json
+          if git diff --staged --quiet; then
+            echo "변경 없음"
+          else
+            git commit -m "52주 신고가·신저가 갱신: $(date -u +%Y-%m-%dT%H:%M)"
+            git push
+          fi
