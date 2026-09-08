@@ -97,7 +97,7 @@
       <a class="backlink" href="index.html">← 포트폴리오 대시보드로</a>
       <div class="eyebrow" style="margin-top:8px">Screener</div>
       <h1>52주 신고가 · 신저가</h1>
-      <div class="sub">코스피·코스닥 전체 + 한국 ETF 전체 + 미국 S&amp;P500 + 미국 주요 ETF · 종가 기준(하루 1회 갱신)</div>
+      <div class="sub">코스피·코스닥 전체 + 한국 ETF 전체 + 미국 S&amp;P500 + 미국 주요 ETF · 종가 기준(하루 1회 갱신) · 갱신폭 상위 20 + 추정 사유</div>
     </div>
     <div class="meta">
       <span id="srcBadge" class="badge">샘플 데이터</span>
@@ -134,9 +134,14 @@
 
   <div id="list"></div>
   <div class="note">
-    <b>읽는 법</b> 최근 252거래일(≈52주) 종가 기준 최고가/최저가와 오늘 종가가 같은 종목만 모았습니다(근접 종목은 포함 안 함).
-    시가총액 상위로 자르지 않은 코스피·코스닥 전체 종목이 대상이라 RS 포트폴리오 대시보드보다 종목 수가 훨씬 많고,
-    대신 <b>하루 한 번</b>(장 마감 후) 갱신됩니다 — 실시간 시세가 아닙니다.
+    <b>읽는 법</b> 최근 252거래일(≈52주) 종가 기준 최고가/최저가와 오늘 종가가 같은 종목 중,
+    <b>전고점/전저점 대비 갱신폭이 큰 순으로 하루 최대 상위 20개</b>만 남깁니다(근접 종목·후순위 종목은
+    제외). 시가총액 상위로 자르지 않은 코스피·코스닥 전체 종목이 대상이라 RS 포트폴리오 대시보드보다
+    스캔 종목 수는 훨씬 많고, 대신 <b>하루 한 번</b>(장 마감 후) 갱신됩니다 — 실시간 시세가 아닙니다.<br><br>
+    <b>사유 칸</b>은 그 종목 이름으로 자동 검색한 최신 관련 기사 1건(한국은 네이버 금융 뉴스,
+    미국은 Google 뉴스)을 그대로 보여주는 것으로, <b>사람이 원인을 확인/검증한 게 아니라 추정입니다</b> —
+    실제 등락 원인과 무관한 기사가 걸리거나, 관련 기사를 못 찾아 비어 있을 수 있습니다. 공시(DART) 연동은
+    아직 없습니다.
   </div>
 
 </div>
@@ -147,23 +152,33 @@ const MKT_HEX = {"코스피":"#c0394f","코스닥":"#a8385a","한국 ETF":"#7a81
 
 /* 샘플 데이터 — Actions가 아직 한 번도 안 돌았을 때만 보임 */
 const SAMPLE = {
-  updated: "", scanned: 0, countHigh52: 6, countLow52: 4,
+  updated: "", scanned: 0, topN: 20, totalHigh52: 34, totalLow52: 19, countHigh52: 6, countLow52: 4,
   items: [
-    {code:"005930",name:"삼성전자",market:"한국",sector:"AI 하드웨어·인프라",exchange:"코스피",last:142000,high52:142000,low52:98000,pctFromHigh:0,pctFromLow:44.9,isHigh52:true,isLow52:false},
-    {code:"011070",name:"LG이노텍",market:"한국",sector:"AI 하드웨어·인프라",exchange:"코스피",last:412000,high52:412000,low52:210000,pctFromHigh:0,pctFromLow:96.2,isHigh52:true,isLow52:false},
-    {code:"247540",name:"에코프로비엠",market:"한국",sector:"2차전지·배터리",exchange:"코스닥",last:98000,high52:98000,low52:61000,pctFromHigh:0,pctFromLow:60.7,isHigh52:true,isLow52:false},
-    {code:"069500",name:"KODEX 200",market:"한국",sector:"ETF",exchange:"한국ETF",last:38500,high52:38500,low52:29800,pctFromHigh:0,pctFromLow:29.2,isHigh52:true,isLow52:false},
-    {code:"MRVL",name:"마벨",market:"미국",sector:"Technology",exchange:"S&P500",last:118.4,high52:118.4,low52:52.1,pctFromHigh:0,pctFromLow:127.3,isHigh52:true,isLow52:false},
-    {code:"SOXX",name:"iShares Semiconductor ETF",market:"미국",sector:"ETF",exchange:"미국ETF",last:265.2,high52:265.2,low52:170.4,pctFromHigh:0,pctFromLow:55.6,isHigh52:true,isLow52:false},
-    {code:"017670",name:"SK텔레콤",market:"한국",sector:"통신",exchange:"코스피",last:48200,high52:63400,low52:48200,pctFromHigh:-24.0,pctFromLow:0,isHigh52:false,isLow52:true},
-    {code:"006110",name:"삼아알미늄",market:"한국",sector:"철강·금속",exchange:"코스닥",last:31500,high52:52000,low52:31500,pctFromHigh:-39.4,pctFromLow:0,isHigh52:false,isLow52:true},
-    {code:"005380",name:"현대차",market:"한국",sector:"자동차·모빌리티",exchange:"코스피",last:178000,high52:265000,low52:178000,pctFromHigh:-32.8,pctFromLow:0,isHigh52:false,isLow52:true},
-    {code:"XBI",name:"SPDR S&P Biotech ETF",market:"미국",sector:"ETF",exchange:"미국ETF",last:78.2,high52:112.5,low52:78.2,pctFromHigh:-30.5,pctFromLow:0,isHigh52:false,isLow52:true},
+    {code:"005930",name:"삼성전자",market:"한국",sector:"AI 하드웨어·인프라",exchange:"코스피",last:142000,breakoutPct:8.4,breakdownPct:null,isHigh52:true,isLow52:false,
+      reason:{title:"삼성전자, HBM4 공급 기대감에 강세",url:"#",source:"네이버 금융 뉴스"}},
+    {code:"011070",name:"LG이노텍",market:"한국",sector:"AI 하드웨어·인프라",exchange:"코스피",last:412000,breakoutPct:15.1,breakdownPct:null,isHigh52:true,isLow52:false,
+      reason:{title:"LG이노텍, 폴디드줌 신규 수주 소식",url:"#",source:"네이버 금융 뉴스"}},
+    {code:"247540",name:"에코프로비엠",market:"한국",sector:"2차전지·배터리",exchange:"코스닥",last:98000,breakoutPct:6.7,breakdownPct:null,isHigh52:true,isLow52:false,
+      reason:null},
+    {code:"069500",name:"KODEX 200",market:"한국",sector:"ETF",exchange:"한국ETF",last:38500,breakoutPct:2.1,breakdownPct:null,isHigh52:true,isLow52:false,
+      reason:null},
+    {code:"MRVL",name:"마벨",market:"미국",sector:"Technology",exchange:"S&P500",last:118.4,breakoutPct:11.9,breakdownPct:null,isHigh52:true,isLow52:false,
+      reason:{title:"Marvell shares jump on AI chip demand outlook",url:"#",source:"Google 뉴스"}},
+    {code:"SOXX",name:"iShares Semiconductor ETF",market:"미국",sector:"ETF",exchange:"미국ETF",last:265.2,breakoutPct:3.4,breakdownPct:null,isHigh52:true,isLow52:false,
+      reason:null},
+    {code:"017670",name:"SK텔레콤",market:"한국",sector:"통신",exchange:"코스피",last:48200,breakoutPct:null,breakdownPct:-5.2,isHigh52:false,isLow52:true,
+      reason:{title:"SK텔레콤, 통신 3사 中 실적 우려 부각",url:"#",source:"네이버 금융 뉴스"}},
+    {code:"006110",name:"삼아알미늄",market:"한국",sector:"철강·금속",exchange:"코스닥",last:31500,breakoutPct:null,breakdownPct:-9.8,isHigh52:false,isLow52:true,
+      reason:null},
+    {code:"005380",name:"현대차",market:"한국",sector:"자동차·모빌리티",exchange:"코스피",last:178000,breakoutPct:null,breakdownPct:-3.1,isHigh52:false,isLow52:true,
+      reason:{title:"현대차, 미국 관세 우려로 약세",url:"#",source:"네이버 금융 뉴스"}},
+    {code:"XBI",name:"SPDR S&P Biotech ETF",market:"미국",sector:"ETF",exchange:"미국ETF",last:78.2,breakoutPct:null,breakdownPct:-4.4,isHigh52:false,isLow52:true,
+      reason:null},
   ]
 };
 
 let DATA = SAMPLE, LIVE = false;
-let state = { dir:"high", mkt:"all", q:"", sort:"pct", sortDir:"desc" };
+let state = { dir:"high", mkt:"all", q:"", sort:"strength", sortDir:"desc" };
 
 const EXCHANGE_GROUP = {"코스피":"kospi","코스닥":"kosdaq","한국ETF":"kr_etf","S&P500":"us_stock","미국ETF":"us_etf"};
 function marketGroup(u){ return EXCHANGE_GROUP[u.exchange] || (u.market==="한국"?"kospi":"us_stock"); }
@@ -172,6 +187,13 @@ function mktLabel(u){
 }
 function mktHex(u){ return MKT_HEX[mktLabel(u)] || "#8a90a0"; }
 
+// 강도 = 신고가면 breakoutPct(전고점 대비 +%), 신저가면 -breakdownPct(전저점 대비 -%를 양수로
+// 뒤집어서 "얼마나 크게 갱신했는지" 하나의 척도로 비교). data/w52.json은 이미 이 값 기준
+// 상위 N개만 담겨 있으므로 기본 정렬은 그 순서를 그대로 보여준다.
+function strength(u){
+  const v = state.dir==="high" ? u.breakoutPct : u.breakdownPct;
+  return v==null ? 0 : Math.abs(v);
+}
 function filtered(){
   const dirKey = state.dir==="high" ? "isHigh52" : "isLow52";
   let items = DATA.items.filter(u=>u[dirKey]);
@@ -180,10 +202,9 @@ function filtered(){
     const q=state.q.toLowerCase();
     items = items.filter(u=>u.name.toLowerCase().includes(q)||u.code.toLowerCase().includes(q));
   }
-  const pctKey = state.dir==="high" ? "pctFromHigh" : "pctFromLow";
   items = [...items].sort((a,b)=>{
     let av, bv;
-    if(state.sort==="pct"){ av=a[pctKey]; bv=b[pctKey]; }
+    if(state.sort==="strength"){ av=strength(a); bv=strength(b); }
     else if(state.sort==="last"){ av=a.last; bv=b.last; }
     else { av=a.name; bv=b.name; }
     if(typeof av==="string") return state.sortDir==="asc" ? av.localeCompare(bv) : bv.localeCompare(av);
@@ -204,10 +225,20 @@ function fmtPct(v){
 
 function renderKpis(){
   const box=document.getElementById("kpis");
-  const total=DATA.scanned||DATA.items.length;
+  const topN = DATA.topN ?? 20;
+  const totH = DATA.totalHigh52 ?? DATA.countHigh52 ?? DATA.items.filter(u=>u.isHigh52).length;
+  const totL = DATA.totalLow52 ?? DATA.countLow52 ?? DATA.items.filter(u=>u.isLow52).length;
   box.innerHTML=`
-   <div class="kpi" style="--accent:#1f8a5b"><div class="lbl">52주 신고가</div><div class="big num">${DATA.countHigh52??DATA.items.filter(u=>u.isHigh52).length}<span>종목</span></div></div>
-   <div class="kpi" style="--accent:#c0394f"><div class="lbl">52주 신저가</div><div class="big num">${DATA.countLow52??DATA.items.filter(u=>u.isLow52).length}<span>종목</span></div></div>`;
+   <div class="kpi" style="--accent:#1f8a5b"><div class="lbl">52주 신고가 (상위 ${topN})</div><div class="big num">${DATA.countHigh52??DATA.items.filter(u=>u.isHigh52).length}<span>/ 전체 ${totH}종목</span></div></div>
+   <div class="kpi" style="--accent:#c0394f"><div class="lbl">52주 신저가 (상위 ${topN})</div><div class="big num">${DATA.countLow52??DATA.items.filter(u=>u.isLow52).length}<span>/ 전체 ${totL}종목</span></div></div>`;
+}
+
+function reasonCell(u){
+  const r = u.reason;
+  if(!r || !r.title) return `<span style="color:#c9cdd6">관련 뉴스 없음</span>`;
+  const safe = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+  const link = r.url ? `<a href="${safe(r.url)}" target="_blank" rel="noopener noreferrer" style="color:var(--ink2);text-decoration:none;border-bottom:1px dotted var(--soft)">${safe(r.title)}</a>` : safe(r.title);
+  return `${link}<div style="font-size:10.5px;color:var(--soft);margin-top:2px">${safe(r.source||"")} · 추정</div>`;
 }
 
 function renderList(){
@@ -218,15 +249,16 @@ function renderList(){
     return;
   }
   const dir = state.dir;
-  const pctHead = dir==="high" ? "고점 대비" : "저점 대비";
+  const strHead = dir==="high" ? "전고점 대비" : "전저점 대비";
   const rows = items.map(u=>{
-    const pct = fmtPct(dir==="high"?u.pctFromHigh:u.pctFromLow);
+    const raw = dir==="high" ? u.breakoutPct : u.breakdownPct;
+    const pct = fmtPct(raw);
     return `<tr>
       <td><span class="nm">${u.name}</span><span class="code">${u.code}</span></td>
       <td style="text-align:left"><span class="mkttag" style="background:${mktHex(u)}">${mktLabel(u)}</span></td>
       <td class="metric">${fmtPrice(u.last,u.market)}</td>
-      <td class="metric">${fmtPrice(dir==="high"?u.high52:u.low52,u.market)}</td>
       <td class="pct ${pct.cls}">${pct.txt}</td>
+      <td style="text-align:left;max-width:320px">${reasonCell(u)}</td>
     </tr>`;
   }).join("");
   const hex = dir==="high" ? "#1f8a5b" : "#c0394f";
@@ -234,12 +266,12 @@ function renderList(){
   const arrow = k => state.sort===k ? (state.sortDir==="asc"?" ▲":" ▼") : "";
   box.innerHTML = `<div class="htbl">
     <div class="rhead"><span class="tag" style="background:${hex}">${dir==="high"?"신고가":"신저가"}</span>
-      <span class="name">${dir==="high"?"52주 신고가":"52주 신저가"} 종목</span><span class="cnt">${items.length}종목</span></div>
+      <span class="name">${dir==="high"?"52주 신고가":"52주 신저가"} 종목</span><span class="cnt">상위 ${items.length}종목</span></div>
     <div class="scroller"><table><thead><tr>
       <th style="cursor:default">종목</th><th style="text-align:left;cursor:default">시장</th>
       <th class="${sortCls('last')}" data-sortkey="last">현재가${arrow('last')}</th>
-      <th style="cursor:default">${dir==="high"?"52주 최고":"52주 최저"}</th>
-      <th class="${sortCls('pct')}" data-sortkey="pct">${pctHead}${arrow('pct')}</th>
+      <th class="${sortCls('strength')}" data-sortkey="strength">${strHead}${arrow('strength')}</th>
+      <th style="text-align:left;cursor:default">사유 (자동 검색, 추정)</th>
     </tr></thead><tbody>${rows}</tbody></table></div></div>`;
 }
 
