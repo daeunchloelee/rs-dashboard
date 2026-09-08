@@ -418,6 +418,23 @@ def weighted_return(close, weights):
     return acc / wsum if wsum > 0 else np.nan
 
 
+def week52(close, window=252):
+    """최근 window(기본 252거래일 ≈ 52주) 종가 기준 최고가/최저가와, 현재가가 그 대비 몇 %
+    위치인지 계산한다. '52주 신고가/신저가' 탭에서 쓴다. 상장 1년 미만 종목은 있는 데이터
+    만큼만 사용한다(신규 상장주가 전부 제외되는 것을 막기 위함)."""
+    if close is None or len(close) < 5:
+        return None, None, None, None, False, False
+    w = close.iloc[-window:] if len(close) > window else close
+    last = float(close.iloc[-1])
+    hi = float(w.max())
+    lo = float(w.min())
+    if hi <= 0 or lo <= 0:
+        return None, None, None, None, False, False
+    pct_from_high = round((last / hi - 1.0) * 100, 1)  # 0=오늘이 52주 신고가, 그 외엔 항상 음수
+    pct_from_low = round((last / lo - 1.0) * 100, 1)   # 0=오늘이 52주 신저가, 그 외엔 항상 양수
+    return hi, lo, pct_from_high, pct_from_low, last >= hi, last <= lo
+
+
 def realized_vol(close, window=60):
     """최근 window 거래일 일간수익률 표준편차를 연율화 (%)."""
     if close is None or len(close) < window + 1:
@@ -456,8 +473,11 @@ def _process_one(args):
     if np.isnan(rlp): rlp = rl
     if np.isnan(rsp): rsp = rs_
     vol = realized_vol(close)
+    high52, low52, pct_from_high, pct_from_low, is_high52, is_low52 = week52(close)
     return {"code": code, "name": name, "market": region, "sector": sector, "marcap": marcap,
-            "rawLong": rl, "rawShort": rs_, "rawLongPrev": rlp, "rawShortPrev": rsp, "vol": vol}
+            "rawLong": rl, "rawShort": rs_, "rawLongPrev": rlp, "rawShortPrev": rsp, "vol": vol,
+            "high52": high52, "low52": low52, "pctFromHigh": pct_from_high, "pctFromLow": pct_from_low,
+            "isHigh52": is_high52, "isLow52": is_low52}
 
 
 def fmt_marcap(v, region):
@@ -651,7 +671,8 @@ def main():
         "updated": updated, "count": int(len(df)), "lag": args.lag,
         "weights": {"long": LONG_W, "short": SHORT_W},
         "items": df[["code","name","market","sector","longZ","shortZ","longRS","shortRS",
-                     "class","dLong","dShort","pLongZ","pShortZ"]]
+                     "class","dLong","dShort","pLongZ","pShortZ",
+                     "high52","low52","pctFromHigh","pctFromLow","isHigh52","isLow52"]]
                    .sort_values(["longRS","shortRS"], ascending=False)
                    .to_dict(orient="records"),
     }
