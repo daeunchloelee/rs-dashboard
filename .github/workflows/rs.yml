@@ -52,5 +52,16 @@ jobs:
             echo "변경 없음"
           else
             git commit -m "RS 자동 갱신: $(date -u +%Y-%m-%dT%H:%M)"
-            git push
+            # 52주 스크리너(w52.yml)가 비슷한 시간대에 먼저 push하면 main이 그 사이 앞서나가서
+            # 그냥 push는 "fetch first" 에러로 실패한다. rebase 후 재시도(최대 5회, 랜덤 대기)로
+            # 두 워크플로우가 겹쳐도 안전하게 반영되도록 한다.
+            for i in 1 2 3 4 5; do
+              if git push; then
+                break
+              fi
+              echo "push 실패(다른 워크플로우와 충돌 추정) - rebase 후 재시도 ($i/5)"
+              git fetch origin main
+              git rebase origin/main
+              sleep $(( (RANDOM % 10) + 5 ))
+            done
           fi
