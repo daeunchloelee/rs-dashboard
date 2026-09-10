@@ -433,6 +433,14 @@ def week52(close, window=252):
         return None, None, None, None, False, False
     pct_from_high = round((last / hi - 1.0) * 100, 1)  # 0=오늘이 52주 신고가, 그 외엔 항상 음수
     pct_from_low = round((last / lo - 1.0) * 100, 1)   # 0=오늘이 52주 신저가, 그 외엔 항상 양수
+    # 거래정지가 지속되면 종가가 마지막 체결가로 그대로 반복(변동성 0)되어, 매일
+    # "신고가=신저가"로 계속 잘못 잡히는 문제가 있다(사용자 보고: 1년 넘게 정지된 종목이
+    # 계속 신고가로 표시됨). 거래정지는 한 달 정도로 끝나는 경우도 많아서, 최근
+    # 20거래일(약 1개월) 동안 종가가 단 한 번도 안 움직였으면 이미 거래정지/데이터 정지로
+    # 추정하고 신고가·신저가 판정에서만 제외한다(가격 정보 자체는 그대로 반환).
+    recent = w.iloc[-20:] if len(w) > 20 else w
+    if recent.nunique() <= 1:
+        return hi, lo, pct_from_high, pct_from_low, False, False
     return hi, lo, pct_from_high, pct_from_low, last >= hi, last <= lo
 
 

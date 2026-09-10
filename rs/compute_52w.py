@@ -102,6 +102,12 @@ def _process_one(args):
     close = cr.fetch_close(code, start)
     if close is None or len(close) < 30:
         return None
+    last_price = float(close.iloc[-1])
+    # 천원 이하 동전주는 노이즈성 등락폭(%)이 과도하게 커져서 신고가/신저가 스크리너에
+    # 계속 걸리는 문제가 있어 제외한다. 원화(코스피/코스닥/한국ETF)에만 적용 — 미국
+    # 종목/ETF는 통화 단위가 달라 이 기준이 의미가 없다.
+    if region == "한국" and last_price <= 1000:
+        return None
     hi, lo, pct_from_high, pct_from_low, is_high, is_low = cr.week52(close)
     if hi is None:
         return None
@@ -112,7 +118,7 @@ def _process_one(args):
     prev_window = window.iloc[:-1]
     breakout_pct = breakdown_pct = None
     if len(prev_window) >= 5:
-        last = float(close.iloc[-1])
+        last = last_price
         prev_hi, prev_lo = float(prev_window.max()), float(prev_window.min())
         if prev_hi > 0:
             breakout_pct = round((last / prev_hi - 1.0) * 100, 2)   # 신고가일 때만 의미 있음(양수)
@@ -120,7 +126,7 @@ def _process_one(args):
             breakdown_pct = round((last / prev_lo - 1.0) * 100, 2)  # 신저가일 때만 의미 있음(음수)
     return {
         "code": code, "name": name, "market": region, "sector": sector, "exchange": exchange,
-        "last": round(float(close.iloc[-1]), 4),
+        "last": round(last_price, 4),
         "high52": round(hi, 4), "low52": round(lo, 4),
         "pctFromHigh": pct_from_high, "pctFromLow": pct_from_low,
         "isHigh52": is_high, "isLow52": is_low,
