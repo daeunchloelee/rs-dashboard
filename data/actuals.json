@@ -1,0 +1,2768 @@
+{
+  "updatedAt": "2026-09-10T07:23:59+00:00",
+  "years": {
+    "381620": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 613.0,
+        "op": 31.9,
+        "ni": 31.3
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 634.7,
+        "op": 43.1,
+        "ni": 60.5
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 226.7,
+        "op": -123.1,
+        "ni": -73.2
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 44.8,
+        "op": -25.3,
+        "ni": -5.7
+      }
+    },
+    "464500": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 62.3,
+        "op": -35.2,
+        "ni": -39.3
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 83.7,
+        "op": -48.8,
+        "ni": -42.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 101.3,
+        "op": -55.7,
+        "ni": -45.4
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 56.8,
+        "op": -13.3,
+        "ni": -10.8
+      }
+    },
+    "458650": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1466.6,
+        "op": 289.2,
+        "ni": 249.0
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1309.1,
+        "op": 146.3,
+        "ni": 181.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 855.5,
+        "op": 10.4,
+        "ni": 49.1
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 247.1,
+        "op": 7.6,
+        "ni": 19.4
+      }
+    },
+    "466100": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 242.0,
+        "op": -57.6,
+        "ni": -224.5
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 334.0,
+        "op": -74.9,
+        "ni": -67.3
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 414.1,
+        "op": -31.8,
+        "ni": -21.3
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 88.6,
+        "op": -28.4,
+        "ni": -26.3
+      }
+    },
+    "289930": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 168.9,
+        "op": -95.2,
+        "ni": -150.2
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 294.0,
+        "op": -48.6,
+        "ni": -55.3
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 407.1,
+        "op": 6.3,
+        "ni": 18.0
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 77.5,
+        "op": -7.1,
+        "ni": 433.2
+      }
+    },
+    "044990": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 805.5,
+        "op": 139.6,
+        "ni": 301.4
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 761.6,
+        "op": 133.7,
+        "ni": 146.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 818.9,
+        "op": 96.6,
+        "ni": 88.9
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 228.3,
+        "op": 19.7,
+        "ni": 15.3
+      }
+    },
+    "475400": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 76.4,
+        "op": -99.9,
+        "ni": -156.9
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 68.9,
+        "op": -142.9,
+        "ni": -134.6
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 130.6,
+        "op": -184.1,
+        "ni": -167.8
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 37.4,
+        "op": -47.7,
+        "ni": -43.0
+      }
+    },
+    "457370": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 269.4,
+        "op": 50.2,
+        "ni": 41.6
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 367.0,
+        "op": 65.4,
+        "ni": 57.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 339.0,
+        "op": 48.5,
+        "ni": 57.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 66.6,
+        "op": 4.1,
+        "ni": 4.2
+      }
+    },
+    "474170": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 121.3,
+        "op": -30.2,
+        "ni": -59.2
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 142.8,
+        "op": -12.0,
+        "ni": -11.4
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 105.7,
+        "op": -5.9,
+        "ni": 0.5
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 42.4,
+        "op": -10.6,
+        "ni": -8.8
+      }
+    },
+    "465480": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 160.8,
+        "op": 40.3,
+        "ni": 50.6
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 190.4,
+        "op": 37.8,
+        "ni": 42.1
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 200.2,
+        "op": 25.5,
+        "ni": 26.8
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 47.6,
+        "op": 10.5,
+        "ni": 38.8
+      }
+    },
+    "209640": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 485.5,
+        "op": 91.6,
+        "ni": 70.5
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 485.3,
+        "op": -12.7,
+        "ni": 3.9
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 460.7,
+        "op": -34.7,
+        "ni": -31.0
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 184.9,
+        "op": 24.7,
+        "ni": 31.9
+      }
+    },
+    "308430": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 14.7,
+        "op": -50.4,
+        "ni": -36.3
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 22.9,
+        "op": -71.4,
+        "ni": -72.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 19.5,
+        "op": -82.4,
+        "ni": -75.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 4.7,
+        "op": -26.4,
+        "ni": 144.0
+      }
+    },
+    "459100": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 995.3,
+        "op": 102.5,
+        "ni": 76.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 907.6,
+        "op": 21.8,
+        "ni": 15.5
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1687.2,
+        "op": 25.9,
+        "ni": 28.5
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 427.1,
+        "op": -12.4,
+        "ni": -21.1
+      }
+    },
+    "466410": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 127.2,
+        "op": 64.3,
+        "ni": 62.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 132.5,
+        "op": 50.7,
+        "ni": 59.9
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 134.7,
+        "op": 46.7,
+        "ni": 57.0
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 28.6,
+        "op": 4.9,
+        "ni": 8.9
+      }
+    },
+    "413390": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 737.3,
+        "op": 43.0,
+        "ni": 26.5
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 848.6,
+        "op": 65.0,
+        "ni": 60.9
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 754.5,
+        "op": 44.1,
+        "ni": 34.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 311.4,
+        "op": 12.0,
+        "ni": 10.9
+      }
+    },
+    "475660": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 244.1,
+        "op": 19.2,
+        "ni": -8.6
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 330.9,
+        "op": 22.4,
+        "ni": 10.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 221.0,
+        "op": -20.3,
+        "ni": -21.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 65.3,
+        "op": -10.1,
+        "ni": -10.9
+      }
+    },
+    "394800": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 27.3,
+        "op": -83.5,
+        "ni": -50.9
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 57.7,
+        "op": -74.2,
+        "ni": -65.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 117.1,
+        "op": -58.9,
+        "ni": -54.1
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 37.9,
+        "op": -16.7,
+        "ni": 67.2
+      }
+    },
+    "464580": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 187.8,
+        "op": 8.1,
+        "ni": -12.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 236.3,
+        "op": 10.2,
+        "ni": 9.6
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 338.4,
+        "op": 1.2,
+        "ni": 8.0
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 52.0,
+        "op": -16.8,
+        "ni": -16.9
+      }
+    },
+    "473980": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 423.0,
+        "op": -2.0,
+        "ni": -313.3
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 689.1,
+        "op": 81.8,
+        "ni": 98.8
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 757.3,
+        "op": 123.4,
+        "ni": 148.5
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 161.5,
+        "op": 35.5,
+        "ni": 45.9
+      }
+    },
+    "163280": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 163.4,
+        "op": 2.4,
+        "ni": -150.6
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 245.0,
+        "op": 18.7,
+        "ni": 19.8
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 280.8,
+        "op": 30.9,
+        "ni": 28.0
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 76.3,
+        "op": 8.3,
+        "ni": 40.9
+      }
+    },
+    "475960": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 37.5,
+        "op": -67.3,
+        "ni": -235.5
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 59.4,
+        "op": -87.8,
+        "ni": -83.0
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 113.1,
+        "op": -55.7,
+        "ni": -48.1
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 49.6,
+        "op": -5.9,
+        "ni": -2.0
+      }
+    },
+    "475560": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 4106.6,
+        "op": 255.9,
+        "ni": 209.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 4641.5,
+        "op": 360.2,
+        "ni": 309.9
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 3612.4,
+        "op": -236.8,
+        "ni": -173.9
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 832.2,
+        "op": -55.6,
+        "ni": -44.1
+      }
+    },
+    "376270": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 53.4,
+        "op": -117.6,
+        "ni": -116.7
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 150.7,
+        "op": -76.8,
+        "ni": -76.5
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 129.8,
+        "op": -155.8,
+        "ni": -237.2
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 45.7,
+        "op": -28.6,
+        "ni": 14.0
+      }
+    },
+    "336680": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 5138.8,
+        "op": 296.8,
+        "ni": 226.5
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 5196.5,
+        "op": 260.4,
+        "ni": 198.9
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 5501.1,
+        "op": 89.0,
+        "ni": 60.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 1787.6,
+        "op": 3.0,
+        "ni": -8.2
+      }
+    },
+    "475580": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 548.5,
+        "op": 50.3,
+        "ni": 39.6
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 550.4,
+        "op": 30.0,
+        "ni": 28.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 630.2,
+        "op": -104.7,
+        "ni": -94.2
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 219.1,
+        "op": -12.6,
+        "ni": -0.3
+      }
+    },
+    "387570": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 101.5,
+        "op": 8.7,
+        "ni": 11.8
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 99.6,
+        "op": -0.3,
+        "ni": -0.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 95.2,
+        "op": -25.8,
+        "ni": -18.8
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 40.3,
+        "op": 7.9,
+        "ni": 7.8
+      }
+    },
+    "373160": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1165.9,
+        "op": 11.2,
+        "ni": -79.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1276.8,
+        "op": -2.9,
+        "ni": -16.1
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1238.6,
+        "op": 45.7,
+        "ni": 47.4
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 267.9,
+        "op": -30.4,
+        "ni": -32.2
+      }
+    },
+    "450950": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 351.7,
+        "op": 34.6,
+        "ni": 42.7
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 349.2,
+        "op": 17.0,
+        "ni": 30.5
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 347.3,
+        "op": 1.1,
+        "ni": 17.5
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 112.2,
+        "op": 0.8,
+        "ni": 13.0
+      }
+    },
+    "482630": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 986.0,
+        "op": 73.7,
+        "ni": 46.8
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1105.2,
+        "op": 107.5,
+        "ni": 89.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1253.9,
+        "op": 176.3,
+        "ni": 149.0
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 380.1,
+        "op": 55.9,
+        "ni": 71.3
+      }
+    },
+    "462980": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 130.1,
+        "op": -32.3,
+        "ni": -126.2
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 233.4,
+        "op": 3.5,
+        "ni": 1.5
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 390.2,
+        "op": 33.3,
+        "ni": 25.6
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 92.1,
+        "op": 11.0,
+        "ni": 8.6
+      }
+    },
+    "452450": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 858.4,
+        "op": 39.9,
+        "ni": 55.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1240.5,
+        "op": 94.3,
+        "ni": 99.5
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 650.9,
+        "op": -212.2,
+        "ni": -246.1
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 110.1,
+        "op": -29.8,
+        "ni": -105.6
+      }
+    },
+    "064400": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 56053.0,
+        "op": 4640.5,
+        "ni": 3323.5
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 59826.3,
+        "op": 5128.6,
+        "ni": 3649.1
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 61295.4,
+        "op": 5518.3,
+        "ni": 4391.6
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 15208.3,
+        "op": 1278.8,
+        "ni": 1187.4
+      }
+    },
+    "212710": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 272.0,
+        "op": -7.1,
+        "ni": -1.3
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 410.9,
+        "op": 6.4,
+        "ni": 5.6
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 322.2,
+        "op": -58.4,
+        "ni": -45.3
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 168.5,
+        "op": 20.7,
+        "ni": 17.7
+      }
+    },
+    "240550": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 908.8,
+        "op": 164.8,
+        "ni": 97.3
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1051.1,
+        "op": 150.5,
+        "ni": 31.3
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1135.4,
+        "op": 170.1,
+        "ni": 114.4
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 339.4,
+        "op": 63.6,
+        "ni": 39.9
+      }
+    },
+    "475830": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1354.2,
+        "op": 956.1,
+        "ni": 682.2
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 209.1,
+        "op": -83.4,
+        "ni": -57.4
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 0.2,
+        "op": -517.6,
+        "ni": -419.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 0.2,
+        "op": -153.5,
+        "ni": 633.8
+      }
+    },
+    "303810": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1201.6,
+        "op": 85.3,
+        "ni": 41.7
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1318.2,
+        "op": 119.2,
+        "ni": 22.4
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1303.4,
+        "op": 130.5,
+        "ni": 86.6
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 242.6,
+        "op": 0.2,
+        "ni": -8.9
+      }
+    },
+    "463480": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 829.2,
+        "op": 45.2,
+        "ni": 42.5
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 617.4,
+        "op": 17.2,
+        "ni": 17.5
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 674.1,
+        "op": -17.2,
+        "ni": -1.1
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 202.2,
+        "op": -11.2,
+        "ni": -11.2
+      }
+    },
+    "479960": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 276.4,
+        "op": 34.6,
+        "ni": 30.2
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 263.6,
+        "op": 29.3,
+        "ni": 24.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 312.5,
+        "op": 52.7,
+        "ni": 46.5
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 81.6,
+        "op": 11.5,
+        "ni": 9.2
+      }
+    },
+    "489500": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 152.6,
+        "op": 56.1,
+        "ni": 33.8
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 250.4,
+        "op": 101.4,
+        "ni": 68.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 201.8,
+        "op": 45.7,
+        "ni": 43.2
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 76.4,
+        "op": 19.0,
+        "ni": 18.6
+      }
+    },
+    "393970": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 646.5,
+        "op": 9.9,
+        "ni": 3.5
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 889.9,
+        "op": 59.9,
+        "ni": -3.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 845.1,
+        "op": -203.6,
+        "ni": -400.6
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 270.0,
+        "op": -5.6,
+        "ni": -9.3
+      }
+    },
+    "226590": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 98.5,
+        "op": -47.5,
+        "ni": -73.5
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 483.1,
+        "op": 47.9,
+        "ni": 30.0
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 964.9,
+        "op": 115.4,
+        "ni": 106.8
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 281.1,
+        "op": 48.3,
+        "ni": 135.0
+      }
+    },
+    "480370": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 2153.0,
+        "op": 176.7,
+        "ni": 151.0
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 2957.7,
+        "op": 165.2,
+        "ni": 198.1
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 2910.1,
+        "op": -366.1,
+        "ni": -401.4
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 463.4,
+        "op": 106.0,
+        "ni": 89.8
+      }
+    },
+    "098070": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1786.2,
+        "op": 151.9,
+        "ni": 148.7
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1558.8,
+        "op": 167.7,
+        "ni": 263.0
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1719.0,
+        "op": 381.8,
+        "ni": 307.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 849.6,
+        "op": 6.1,
+        "ni": -11.7
+      }
+    },
+    "484810": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 331.9,
+        "op": 35.5,
+        "ni": 21.7
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 572.3,
+        "op": 52.7,
+        "ni": 38.4
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 566.3,
+        "op": -7.7,
+        "ni": -153.1
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 101.4,
+        "op": -15.6,
+        "ni": -14.4
+      }
+    },
+    "444530": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 43.9,
+        "op": -15.4,
+        "ni": -11.9
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 72.3,
+        "op": -1.4,
+        "ni": -80.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 104.0,
+        "op": -26.6,
+        "ni": -25.3
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 22.5,
+        "op": -14.4,
+        "ni": -13.9
+      }
+    },
+    "462860": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 420.6,
+        "op": 106.7,
+        "ni": 113.2
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 626.6,
+        "op": 100.2,
+        "ni": 99.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 599.7,
+        "op": 136.3,
+        "ni": 107.4
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 150.1,
+        "op": 36.4,
+        "ni": 27.3
+      }
+    },
+    "481070": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 418.9,
+        "op": 162.1,
+        "ni": 132.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 446.0,
+        "op": 124.3,
+        "ni": 101.1
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 600.1,
+        "op": 100.8,
+        "ni": 87.6
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 302.7,
+        "op": 62.7,
+        "ni": 47.3
+      }
+    },
+    "448900": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 379.6,
+        "op": 42.7,
+        "ni": 11.4
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 374.5,
+        "op": 36.1,
+        "ni": 27.8
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 369.3,
+        "op": 14.6,
+        "ni": -0.5
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 105.0,
+        "op": 1.8,
+        "ni": 7.6
+      }
+    },
+    "081180": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 504.4,
+        "op": 2.4,
+        "ni": -69.3
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 539.3,
+        "op": 13.4,
+        "ni": 20.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 592.1,
+        "op": -30.6,
+        "ni": -37.9
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 75.5,
+        "op": -39.6,
+        "ni": -37.7
+      }
+    },
+    "459510": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 104.1,
+        "op": -54.7,
+        "ni": -45.9
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 120.6,
+        "op": -28.6,
+        "ni": -36.8
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 125.3,
+        "op": -82.1,
+        "ni": -83.2
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 61.6,
+        "op": -41.5,
+        "ni": -82.7
+      }
+    },
+    "136150": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 418.8,
+        "op": 28.6,
+        "ni": 18.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 421.9,
+        "op": 63.8,
+        "ni": 78.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 296.2,
+        "op": -17.5,
+        "ni": -20.6
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 99.5,
+        "op": 5.4,
+        "ni": 10.1
+      }
+    },
+    "476040": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 15.9,
+        "op": -97.9,
+        "ni": -388.7
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 19.5,
+        "op": -122.3,
+        "ni": -115.4
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 24.1,
+        "op": -162.0,
+        "ni": -157.4
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 6.0,
+        "op": -43.5,
+        "ni": -69.5
+      }
+    },
+    "376900": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 124.2,
+        "op": -73.8,
+        "ni": 166.3
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 131.1,
+        "op": -55.7,
+        "ni": -76.9
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 262.5,
+        "op": 4.5,
+        "ni": -28.0
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 82.2,
+        "op": -134.5,
+        "ni": -93.4
+      }
+    },
+    "424870": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1.1,
+        "op": -118.0,
+        "ni": 88.6
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 6.5,
+        "op": -126.0,
+        "ni": -56.9
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1.1,
+        "op": -280.0,
+        "ni": -273.6
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 0.0,
+        "op": -42.7,
+        "ni": -39.0
+      }
+    },
+    "489460": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 171.3,
+        "op": 51.6,
+        "ni": 33.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 296.3,
+        "op": 92.3,
+        "ni": 71.9
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 284.9,
+        "op": 42.3,
+        "ni": 41.5
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 98.8,
+        "op": 27.0,
+        "ni": 25.3
+      }
+    },
+    "483650": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 2008.0,
+        "op": 324.5,
+        "ni": 136.0
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 3090.6,
+        "op": 598.4,
+        "ni": 154.1
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 5197.4,
+        "op": 1014.7,
+        "ni": 790.5
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 1868.6,
+        "op": 472.4,
+        "ni": 380.6
+      }
+    },
+    "287840": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 16.2,
+        "op": -173.9,
+        "ni": -167.8
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 29.1,
+        "op": -97.9,
+        "ni": -99.1
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 23.0,
+        "op": -103.0,
+        "ni": -106.0
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 7.6,
+        "op": -22.1,
+        "ni": -20.7
+      }
+    },
+    "475430": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 559.4,
+        "op": 37.3,
+        "ni": 23.7
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 689.5,
+        "op": 59.0,
+        "ni": 87.8
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 693.2,
+        "op": 74.0,
+        "ni": 88.1
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 248.5,
+        "op": 32.8,
+        "ni": 58.1
+      }
+    },
+    "474650": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 73.6,
+        "op": 7.8,
+        "ni": -121.9
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 111.9,
+        "op": -40.0,
+        "ni": -25.4
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 131.2,
+        "op": -73.8,
+        "ni": -69.8
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 42.7,
+        "op": -46.4,
+        "ni": 0.6
+      }
+    },
+    "340450": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 272.9,
+        "op": 1.6,
+        "ni": -5.5
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 258.9,
+        "op": -12.3,
+        "ni": -12.6
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 315.3,
+        "op": 12.4,
+        "ni": 40.4
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 82.9,
+        "op": 4.3,
+        "ni": 7.8
+      }
+    },
+    "388610": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 154.3,
+        "op": 7.0,
+        "ni": 21.0
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 168.0,
+        "op": 17.0,
+        "ni": -59.5
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 177.1,
+        "op": 3.9,
+        "ni": 5.6
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 54.6,
+        "op": 5.8,
+        "ni": 4.2
+      }
+    },
+    "463020": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 178.8,
+        "op": 14.8,
+        "ni": 11.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 197.2,
+        "op": 4.3,
+        "ni": -56.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 188.2,
+        "op": -11.1,
+        "ni": -10.6
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 53.1,
+        "op": 2.3,
+        "ni": 4.1
+      }
+    },
+    "234030": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1382.3,
+        "op": 48.6,
+        "ni": 16.3
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1674.3,
+        "op": 52.7,
+        "ni": 55.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1545.6,
+        "op": 25.1,
+        "ni": 17.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 500.0,
+        "op": 7.5,
+        "ni": 10.5
+      }
+    },
+    "331740": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 219.8,
+        "op": -244.8,
+        "ni": -365.7
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 232.8,
+        "op": -180.4,
+        "ni": -493.4
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 254.8,
+        "op": -135.2,
+        "ni": -125.2
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 74.6,
+        "op": -7.9,
+        "ni": -1.1
+      }
+    },
+    "484120": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 950.6,
+        "op": 78.1,
+        "ni": -16.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1417.1,
+        "op": 97.0,
+        "ni": 152.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1397.9,
+        "op": 33.8,
+        "ni": 4.9
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 588.9,
+        "op": 82.0,
+        "ni": 98.2
+      }
+    },
+    "380550": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 15.6,
+        "op": -117.6,
+        "ni": 52.6
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 22.2,
+        "op": -146.5,
+        "ni": -151.0
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 26.2,
+        "op": -165.5,
+        "ni": -223.9
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 7.8,
+        "op": -52.3,
+        "ni": -56.6
+      }
+    },
+    "475230": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 515.3,
+        "op": 121.4,
+        "ni": 15.0
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 528.0,
+        "op": 62.2,
+        "ni": 20.0
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 594.8,
+        "op": 45.0,
+        "ni": -5.3
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 198.5,
+        "op": 18.7,
+        "ni": 59.7
+      }
+    },
+    "468530": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 5.8,
+        "op": -72.6,
+        "ni": -227.9
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 23.0,
+        "op": -91.2,
+        "ni": -57.3
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 29.5,
+        "op": -113.7,
+        "ni": -90.1
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 3.5,
+        "op": -39.6,
+        "ni": -31.1
+      }
+    },
+    "439260": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 8163.7,
+        "op": 359.0,
+        "ni": 383.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 10753.1,
+        "op": 1580.6,
+        "ni": 1726.5
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 12281.3,
+        "op": 2941.0,
+        "ni": 2487.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 3544.4,
+        "op": 952.5,
+        "ni": 787.2
+      }
+    },
+    "309710": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 449.6,
+        "op": 7.0,
+        "ni": -78.2
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 491.0,
+        "op": 35.9,
+        "ni": 114.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 619.7,
+        "op": -18.5,
+        "ni": -143.3
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 150.9,
+        "op": -27.7,
+        "ni": -14.6
+      }
+    },
+    "456160": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 7.4,
+        "op": -131.4,
+        "ni": -104.9
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 7.7,
+        "op": -107.6,
+        "ni": -832.5
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 4.2,
+        "op": -122.0,
+        "ni": -120.9
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 16.0,
+        "op": -27.0,
+        "ni": -57.1
+      }
+    },
+    "484590": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 830.4,
+        "op": 69.2,
+        "ni": 92.3
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1415.9,
+        "op": 180.6,
+        "ni": 164.9
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1546.1,
+        "op": 266.3,
+        "ni": 226.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 467.9,
+        "op": 114.8,
+        "ni": 92.9
+      }
+    },
+    "125490": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1219.8,
+        "op": 149.1,
+        "ni": -37.7
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1444.4,
+        "op": 122.8,
+        "ni": 103.0
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1558.8,
+        "op": 102.9,
+        "ni": 36.6
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 490.4,
+        "op": 32.6,
+        "ni": 19.7
+      }
+    },
+    "318060": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 104.5,
+        "op": -69.8,
+        "ni": -54.3
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 161.2,
+        "op": -91.7,
+        "ni": -326.6
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 205.3,
+        "op": -110.5,
+        "ni": -116.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 62.8,
+        "op": -36.9,
+        "ni": -35.6
+      }
+    },
+    "488280": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 62.7,
+        "op": -56.7,
+        "ni": -125.7
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 96.1,
+        "op": -45.0,
+        "ni": -141.0
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 100.9,
+        "op": -56.4,
+        "ni": -52.9
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 20.9,
+        "op": -31.6,
+        "ni": -30.7
+      }
+    },
+    "317450": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 2423.4,
+        "op": 836.2,
+        "ni": 745.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 2694.3,
+        "op": 927.5,
+        "ni": 686.7
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 2872.5,
+        "op": 925.0,
+        "ni": 814.4
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 761.1,
+        "op": 276.1,
+        "ni": 243.2
+      }
+    },
+    "486990": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 35.8,
+        "op": -113.2,
+        "ni": -131.4
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 84.4,
+        "op": -120.2,
+        "ni": -248.5
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 131.0,
+        "op": -152.8,
+        "ni": -166.3
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 38.2,
+        "op": -61.9,
+        "ni": -62.0
+      }
+    },
+    "469610": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 518.3,
+        "op": 45.5,
+        "ni": 6.6
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 611.9,
+        "op": 57.0,
+        "ni": 54.4
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 757.0,
+        "op": 86.4,
+        "ni": 85.2
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 195.6,
+        "op": 8.9,
+        "ni": 32.1
+      }
+    },
+    "494120": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 32.1,
+        "op": -65.6,
+        "ni": -99.8
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 54.1,
+        "op": -62.1,
+        "ni": -48.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 73.0,
+        "op": -75.3,
+        "ni": -78.6
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 34.7,
+        "op": -18.7,
+        "ni": -20.8
+      }
+    },
+    "061090": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1536.0,
+        "op": 128.4,
+        "ni": 108.6
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1675.0,
+        "op": 215.5,
+        "ni": 190.0
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1792.9,
+        "op": 162.9,
+        "ni": 167.1
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 754.6,
+        "op": 180.0,
+        "ni": 147.7
+      }
+    },
+    "403850": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 878.5,
+        "op": 39.9,
+        "ni": -183.4
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 973.7,
+        "op": 188.1,
+        "ni": 49.9
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 938.6,
+        "op": 193.6,
+        "ni": 181.2
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 217.0,
+        "op": 26.6,
+        "ni": 215.4
+      }
+    },
+    "388210": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 702.0,
+        "op": 28.8,
+        "ni": -473.9
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1086.7,
+        "op": 236.4,
+        "ni": 135.0
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1605.6,
+        "op": 517.8,
+        "ni": -215.0
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 479.0,
+        "op": 155.8,
+        "ni": 100.9
+      }
+    },
+    "488900": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 455.2,
+        "op": -79.0,
+        "ni": -102.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 303.8,
+        "op": -140.7,
+        "ni": -154.4
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 367.9,
+        "op": -73.6,
+        "ni": -66.0
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 66.7,
+        "op": -31.2,
+        "ni": -24.4
+      }
+    },
+    "478340": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 16.3,
+        "op": -30.0,
+        "ni": -139.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 43.0,
+        "op": -44.3,
+        "ni": -107.3
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 132.4,
+        "op": -54.6,
+        "ni": -76.8
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 19.5,
+        "op": -36.7,
+        "ni": -35.1
+      }
+    },
+    "491000": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 172.7,
+        "op": -239.1,
+        "ni": -570.2
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 271.2,
+        "op": -265.0,
+        "ni": -255.8
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 511.9,
+        "op": -226.4,
+        "ni": -228.7
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 125.1,
+        "op": -121.9,
+        "ni": -110.3
+      }
+    },
+    "261520": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 214.1,
+        "op": 30.0,
+        "ni": 33.9
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 302.8,
+        "op": 23.9,
+        "ni": 31.3
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 212.5,
+        "op": -68.0,
+        "ni": -48.1
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 55.9,
+        "op": -24.2,
+        "ni": -29.3
+      }
+    },
+    "217590": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 3722.6,
+        "op": 119.9,
+        "ni": 67.7
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 3625.1,
+        "op": 142.7,
+        "ni": 92.2
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 3408.8,
+        "op": 64.3,
+        "ni": -5.9
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 1063.5,
+        "op": 13.4,
+        "ni": 17.7
+      }
+    },
+    "153890": {
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 50.4,
+        "op": 11.0,
+        "ni": 11.6
+      }
+    },
+    "475040": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 71.7,
+        "op": -649.0,
+        "ni": -544.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 115.4,
+        "op": -638.8,
+        "ni": -655.3
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 181.1,
+        "op": -586.0,
+        "ni": -622.3
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 64.2,
+        "op": -111.5,
+        "ni": -113.1
+      }
+    },
+    "365660": {
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 29.3,
+        "op": -21.3,
+        "ni": -21.5
+      }
+    },
+    "387690": {
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 61.8,
+        "op": 28.3,
+        "ni": 18.6
+      }
+    },
+    "282620": {
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 711.0,
+        "op": 59.1,
+        "ni": 41.8
+      }
+    },
+    "0007J0": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 0.0,
+        "op": -34.8,
+        "ni": -31.1
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 0.0,
+        "op": -63.7,
+        "ni": -60.4
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 0.0,
+        "op": -86.0,
+        "ni": -80.5
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 0.0,
+        "op": -24.9,
+        "ni": -22.6
+      }
+    },
+    "0011T0": {
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 289.5,
+        "op": -100.4,
+        "ni": -113.8
+      }
+    },
+    "0117P0": {
+      "2023": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 721.6,
+        "op": 256.8,
+        "ni": 191.0
+      },
+      "2024": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1137.8,
+        "op": 281.6,
+        "ni": 170.1
+      },
+      "2025": {
+        "period": "연간",
+        "isFullYear": true,
+        "rev": 1178.8,
+        "op": 167.3,
+        "ni": 109.5
+      },
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 190.4,
+        "op": 2.1,
+        "ni": 0.9
+      }
+    },
+    "0039P0": {
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 182.6,
+        "op": 37.9,
+        "ni": 42.4
+      }
+    },
+    "0156T0": {
+      "2026": {
+        "period": "2026년 반기(누적)",
+        "isFullYear": false,
+        "rev": 66.1,
+        "op": 21.2,
+        "ni": 17.9
+      }
+    }
+  }
+}
