@@ -419,10 +419,11 @@ def weighted_return(close, weights):
     return acc / wsum if wsum > 0 else np.nan
 
 
-def week52(close, window=252):
-    """최근 window(기본 252거래일 ≈ 52주) 종가 기준 최고가/최저가와, 현재가가 그 대비 몇 %
-    위치인지 계산한다. '52주 신고가/신저가' 탭에서 쓴다. 상장 1년 미만 종목은 있는 데이터
-    만큼만 사용한다(신규 상장주가 전부 제외되는 것을 막기 위함)."""
+def week52(close, window=20):
+    """최근 window(기본 20거래일 ≈ 1개월) 종가 기준 최고가/최저가와, 현재가가 그 대비 몇 %
+    위치인지 계산한다. '20일 신고가/신저가' 탭에서 쓴다(원래 252거래일=52주로 했다가
+    너무 길다는 판단으로 20거래일로 줄임). 상장 직후라 데이터가 window보다 적은 종목은
+    있는 데이터만큼만 사용한다(신규 상장주가 전부 제외되는 것을 막기 위함)."""
     if close is None or len(close) < 5:
         return None, None, None, None, False, False
     w = close.iloc[-window:] if len(close) > window else close
@@ -431,12 +432,12 @@ def week52(close, window=252):
     lo = float(w.min())
     if hi <= 0 or lo <= 0:
         return None, None, None, None, False, False
-    pct_from_high = round((last / hi - 1.0) * 100, 1)  # 0=오늘이 52주 신고가, 그 외엔 항상 음수
-    pct_from_low = round((last / lo - 1.0) * 100, 1)   # 0=오늘이 52주 신저가, 그 외엔 항상 양수
+    pct_from_high = round((last / hi - 1.0) * 100, 1)  # 0=오늘이 20일 신고가, 그 외엔 항상 음수
+    pct_from_low = round((last / lo - 1.0) * 100, 1)   # 0=오늘이 20일 신저가, 그 외엔 항상 양수
     # 거래정지가 지속되면 종가가 마지막 체결가로 그대로 반복(변동성 0)되어, 매일
     # "신고가=신저가"로 계속 잘못 잡히는 문제가 있다(사용자 보고: 1년 넘게 정지된 종목이
-    # 계속 신고가로 표시됨). 20거래일 기준으로도 일부가 안 걸러져서, 최근 5거래일
-    # 연속으로 종가가 단 한 번도 안 움직였으면 이미 거래정지/데이터 정지로 추정하고
+    # 계속 신고가로 표시됨). 최근 5거래일 연속으로 종가가 단 한 번도 안 움직였으면
+    # 거래정지/데이터 정지로 추정하고
     # 신고가·신저가 판정에서만 제외한다(가격 정보 자체는 그대로 반환).
     recent = w.iloc[-5:] if len(w) > 5 else w
     if recent.nunique() <= 1:
