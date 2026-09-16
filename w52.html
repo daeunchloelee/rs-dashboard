@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>52주 신고가 · 신저가</title>
+<title>20일 신고가 · 신저가</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
 <style>
@@ -96,7 +96,7 @@
     <div class="brand">
       <a class="backlink" href="index.html">← 포트폴리오 대시보드로</a>
       <div class="eyebrow" style="margin-top:8px">Screener</div>
-      <h1>52주 신고가 · 신저가</h1>
+      <h1>20일 신고가 · 신저가</h1>
       <div class="sub">코스피·코스닥 전체 + 한국 ETF 전체 + 미국 S&amp;P500 + 미국 주요 ETF · 종가 기준(하루 1회 갱신) · 시장별 갱신폭 상위 20 + 추정 사유</div>
     </div>
     <div class="meta">
@@ -134,7 +134,7 @@
 
   <div id="list"></div>
   <div class="note">
-    <b>읽는 법</b> 최근 252거래일(≈52주) 종가 기준 최고가/최저가와 오늘 종가가 같은 종목 중,
+    <b>읽는 법</b> 최근 20거래일(약 1개월) 종가 기준 최고가/최저가와 오늘 종가가 같은 종목 중,
     <b>시장(코스피/코스닥/한국 ETF/S&amp;P500/미국 ETF)별로 전고점/전저점 대비 갱신폭이 큰 순
     상위 20개씩</b>만 남깁니다(시장을 안 나누면 종목 수가 많은 코스피·코스닥이 결과를 독차지해서
     작은 시장은 하나도 안 뽑히는 문제가 있었습니다). 시가총액 상위로 자르지 않은 코스피·코스닥
@@ -231,8 +231,8 @@ function renderKpis(){
   const totH = DATA.totalHigh52 ?? DATA.countHigh52 ?? DATA.items.filter(u=>u.isHigh52).length;
   const totL = DATA.totalLow52 ?? DATA.countLow52 ?? DATA.items.filter(u=>u.isLow52).length;
   box.innerHTML=`
-   <div class="kpi" style="--accent:#1f8a5b"><div class="lbl">52주 신고가 (시장별 상위 ${topN})</div><div class="big num">${DATA.countHigh52??DATA.items.filter(u=>u.isHigh52).length}<span>/ 전체 ${totH}종목</span></div></div>
-   <div class="kpi" style="--accent:#c0394f"><div class="lbl">52주 신저가 (시장별 상위 ${topN})</div><div class="big num">${DATA.countLow52??DATA.items.filter(u=>u.isLow52).length}<span>/ 전체 ${totL}종목</span></div></div>`;
+   <div class="kpi" style="--accent:#1f8a5b"><div class="lbl">20일 신고가 (시장별 상위 ${topN})</div><div class="big num">${DATA.countHigh52??DATA.items.filter(u=>u.isHigh52).length}<span>/ 전체 ${totH}종목</span></div></div>
+   <div class="kpi" style="--accent:#c0394f"><div class="lbl">20일 신저가 (시장별 상위 ${topN})</div><div class="big num">${DATA.countLow52??DATA.items.filter(u=>u.isLow52).length}<span>/ 전체 ${totL}종목</span></div></div>`;
 }
 
 function reasonCell(u){
@@ -268,7 +268,7 @@ function renderList(){
   const arrow = k => state.sort===k ? (state.sortDir==="asc"?" ▲":" ▼") : "";
   box.innerHTML = `<div class="htbl">
     <div class="rhead"><span class="tag" style="background:${hex}">${dir==="high"?"신고가":"신저가"}</span>
-      <span class="name">${dir==="high"?"52주 신고가":"52주 신저가"} 종목</span><span class="cnt">${items.length}종목 (시장별 상위 20)</span></div>
+      <span class="name">${dir==="high"?"20일 신고가":"20일 신저가"} 종목</span><span class="cnt">${items.length}종목 (시장별 상위 20)</span></div>
     <div class="scroller"><table><thead><tr>
       <th style="cursor:default">종목</th><th style="text-align:left;cursor:default">시장</th>
       <th class="${sortCls('last')}" data-sortkey="last">현재가${arrow('last')}</th>

@@ -171,7 +171,7 @@
 
   <div class="top">
     <div class="brand">
-      <a class="backlink" href="w52.html" style="display:inline-block;margin-bottom:8px">52주 신고가·신저가 스크리너 →</a>
+      <a class="backlink" href="w52.html" style="display:inline-block;margin-bottom:8px">20일 신고가·신저가 스크리너 →</a>
       <div class="eyebrow">Portfolio · Live</div>
       <h1>포트폴리오 · 테마별 비중 · RS</h1>
       <div class="sub">전 세계 ETF·종목을 추적해 테마 비중과 RS(상대강도)를 실시간으로 · 현금성 ETF는 현금으로 계산</div>
@@ -194,7 +194,7 @@
     <button data-view="detail" aria-pressed="false">종목 상세 · RS</button>
     <button data-view="universe" aria-pressed="false">유니버스 RS</button>
     <button data-view="momentum" aria-pressed="false">RS 변화 Top</button>
-    <button data-view="w52" aria-pressed="false">52주 신고가·신저가</button>
+    <button data-view="w52" aria-pressed="false">20일 신고가·신저가</button>
   </div>
 
   <!-- ============ THEME VIEW ============ -->
@@ -342,11 +342,11 @@
     <div class="mom-grid" id="momentum"></div>
   </section>
 
-  <!-- ============ 52주 신고가·신저가 VIEW ============ -->
+  <!-- ============ 20일 신고가·신저가 VIEW ============ -->
   <section id="w52View" class="hidden">
     <div class="panel">
-      <h2>52주 신고가 · 신저가</h2>
-      <div class="ph-sub">최근 252거래일(≈52주) 종가 기준 · 오늘 종가가 그 기간의 최고가/최저가와 같으면 신고가/신저가 · <span id="w52Meta">샘플</span></div>
+      <h2>20일 신고가 · 신저가</h2>
+      <div class="ph-sub">최근 20거래일(약 1개월) 종가 기준 · 오늘 종가가 그 기간의 최고가/최저가와 같으면 신고가/신저가 · <span id="w52Meta">샘플</span></div>
     </div>
     <div class="controls">
       <span class="ctl-label">시장</span>
@@ -359,7 +359,7 @@
       </div>
     </div>
     <div class="mom-grid" id="w52"></div>
-    <div class="note"><span><b>읽는 법</b> "고점 대비"/"저점 대비"는 오늘 종가가 52주 최고가/최저가 대비 몇 % 위치인지입니다(신고가는 항상 0.0%, 신저가도 항상 0.0%). RS 등급 배지는 다른 화면과 같은 4분면 기준입니다.</span></div>
+    <div class="note"><span><b>읽는 법</b> "고점 대비"/"저점 대비"는 오늘 종가가 20일 최고가/최저가 대비 몇 % 위치인지입니다(신고가는 항상 0.0%, 신저가도 항상 0.0%). RS 등급 배지는 다른 화면과 같은 4분면 기준입니다.</span></div>
   </section>
 
 </div>
@@ -597,7 +597,7 @@ UNI_SAMPLE.forEach(u=>{ if(u.dShort===undefined){
   u.pShortZ=+(u.shortZ-u.dShort*0.22).toFixed(1);
   u.pLongZ =+(u.longZ -u.dLong*0.22).toFixed(1);
 }});
-// 샘플에 52주 신고가/신저가 보강 — 미리보기용(실제 값은 Actions 실행 후 rs.json에서 옴).
+// 샘플에 20일 신고가/신저가 보강 — 미리보기용(실제 값은 Actions 실행 후 rs.json에서 옴).
 // 강한 종목 몇 개는 신고가로, 가장 약한 종목 몇 개는 신저가로 표시.
 UNI_SAMPLE.forEach(u=>{ if(u.isHigh52===undefined){ u.isHigh52=false; u.isLow52=false; u.pctFromHigh=-Math.random()*15-1; u.pctFromLow=Math.random()*20+1; }});
 ["000660","011070","MRVL","DELL"].forEach(c=>{const u=UNI_SAMPLE.find(x=>x.code===c);if(u){u.isHigh52=true;u.pctFromHigh=0;}});
@@ -727,7 +727,7 @@ function renderMomentum(){
 }
 async function renderMomentumView(){ if(!UNI.length) await loadUniverse(); renderMomentum(); }
 
-/* ---------- 52주 신고가·신저가 ---------- */
+/* ---------- 20일 신고가·신저가 ---------- */
 function w52Filtered(){
  const isEtf=u=>u.sector==="ETF";
  switch(state.w52mkt){
@@ -760,7 +760,7 @@ function renderW52(){
  const items=w52Filtered();
  const highs=items.filter(u=>u.isHigh52).sort((a,b)=>(b.longRS+b.shortRS)-(a.longRS+a.shortRS));
  const lows=items.filter(u=>u.isLow52).sort((a,b)=>(a.longRS+a.shortRS)-(b.longRS+b.shortRS));
- box.innerHTML=w52Table(`52주 신고가`,highs,"high","#1f8a5b")+w52Table(`52주 신저가`,lows,"low","#c0394f");
+ box.innerHTML=w52Table(`20일 신고가`,highs,"high","#1f8a5b")+w52Table(`20일 신저가`,lows,"low","#c0394f");
 }
 async function renderW52View(){ if(!UNI.length) await loadUniverse(); renderW52(); }
 
